@@ -1,0 +1,2 @@
+#!/bin/bash
+cmake -E chdir build/ cmake -DCMAKE_TOOLCHAIN_FILE=toolchains/arm-none-eabi.cmake ../
