@@ -38,16 +38,27 @@
 #define BRICKLET_HARDWARE_VERSION_MINOR 0
 #define BRICKLET_HARDWARE_VERSION_REVISION 0
 
-#define BRICKLET_DEVICE_IDENTIFIER 227
+#define BRICKLET_DEVICE_IDENTIFIER 246
 
 #define LOGGING_LEVEL LOGGING_DEBUG
-#define DEBUG_BRICKLET 0
+#define DEBUG_BRICKLET 1
 
 #define BRICKLET_NO_OFFSET
 #define BRICKLET_VALUE_APPLIED_OUTSIDE
 #define INVOCATION_IN_BRICKLET_CODE
+#define BRICKLET_HAS_NO_DESTRUCTOR
+
+#define BOARD_MCK 64000000
+
+#define PIN_MOSI (BS->pin1_ad)
+#define PIN_NSS  (BS->pin2_da)
+#define PIN_SCK  (BS->pin3_pwm)
+#define PIN_MISO (BS->pin4_io)
 
 typedef struct {
+	uint8_t state;
+	uint32_t tick;
+	uint8_t counter;
 } BrickContext;
 
 #endif
