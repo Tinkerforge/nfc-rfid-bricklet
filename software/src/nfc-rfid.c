@@ -78,34 +78,27 @@ bool pn532_read_passive_target_id(void) {
 		PN532_MIFARE_ISO14443A
 	};
 
-	pn532_send_data_wo_timeout(command, sizeof(command));
-	if(pn532_read_ack(PN532_READ_ACK_TIMEOUT)) {
-		if(!pn532_wait_until_ready(PN532_WAIT_UNTIL_READY_TIMEOUT*100)) {
-			BA->printf("No ACK\n\r");
-			return false;
-		}
+	if(pn532_send_data(command, sizeof(command))) {
+		SLEEP_MS(1);
 		uint8_t response[20] = {0};
-		pn532_read_data(response, 20);
+		if(pn532_read_response(response, 20)) {
 
-		uint8_t length = response[12];
-		uint8_t uid[4] = {0};
-		for(uint8_t i = 0; i < length; i++) {
-			uid[i] = response[13+i];
+			uint8_t length = response[12];
+			uint8_t uid[4] = {0};
+			for(uint8_t i = 0; i < length; i++) {
+				uid[i] = response[13+i];
+			}
+
+			BA->printf("UID: ");
+			for(uint8_t i = 0; i < 4; i++) {
+				BA->printf("%x ", uid[i]);
+			}
+			BA->printf("\n\r");
+		} else {
+			BA->printf("No response\n\r");
 		}
-
-
-
-		BA->printf("UID: ");
-		for(uint8_t i = 0; i < 4; i++) {
-			BA->printf("%x ", uid[i]);
-		}
-		BA->printf("\n\r");
-
-/*		if(response[5] != 0xD5 || response[6] == 0x15) {
-			return false;
-		}*/
 	} else {
-		BA->printf("No Card\n\r");
+		BA->printf("Could not send data\n\r");
 		return false;
 	}
 
@@ -120,14 +113,13 @@ bool pn532_sam_configure_mode_normal(void) {
 		PN532_SAMC_IRQ_OFF
 	};
 
-	pn532_send_data_wo_timeout(command, sizeof(command));
-	if(pn532_read_ack(PN532_READ_ACK_TIMEOUT)) {
+	if(pn532_send_data(command, sizeof(command))) {
 		uint8_t response[9];
-		pn532_read_data(response, 9);
-
-		if(response[5] == 0xD5 && response[6] == 0x15) {
-			BA->printf("pn532_sam_configure_mode_normal OK\n\r");
-			return true;
+		if(pn532_read_response(response, 9)) {
+			if(response[5] == 0xD5 && response[6] == 0x15) {
+				BA->printf("pn532_sam_configure_mode_normal OK\n\r");
+				return true;
+			}
 		}
 	}
 
@@ -213,7 +205,11 @@ bool pn532_read_ack(uint32_t timeout) {
 	return false;
 }
 
-void pn532_read_data_wo_timeout(uint8_t *data, uint8_t length) {
+bool pn532_read_response(uint8_t *data, uint8_t length) {
+	if(!pn532_wait_until_ready(PN532_WAIT_UNTIL_READY_TIMEOUT)) {
+		return false;
+	}
+
 	PIN_NSS.pio->PIO_CODR = PIN_NSS.mask;
 
 	spibb_transceive_byte(PN532_SPI_DATAREAD);
@@ -223,21 +219,11 @@ void pn532_read_data_wo_timeout(uint8_t *data, uint8_t length) {
 	}
 
 	PIN_NSS.pio->PIO_SODR = PIN_NSS.mask;
-}
-
-bool pn532_read_data(uint8_t *data, uint8_t length) {
-	if(!pn532_wait_until_ready(PN532_WAIT_UNTIL_READY_TIMEOUT)) {
-		BA->printf("read data: timeout\n\r");
-		return false;
-	}
-
-	pn532_read_data_wo_timeout(data, length);
 
 	return true;
-
 }
 
-void pn532_send_data_wo_timeout(uint8_t *data, uint8_t length) {
+bool pn532_send_data(uint8_t *data, uint8_t length) {
 	PIN_NSS.pio->PIO_CODR = PIN_NSS.mask;
 
 	spibb_transceive_byte(PN532_SPI_DATAWRITE);
@@ -259,17 +245,12 @@ void pn532_send_data_wo_timeout(uint8_t *data, uint8_t length) {
 	spibb_transceive_byte(256 - checksum);
 	spibb_transceive_byte(PN532_POSTAMBLE);
 	PIN_NSS.pio->PIO_SODR = PIN_NSS.mask;
-}
 
-bool pn532_send_data(uint8_t *data, uint8_t length) {
-	if(!pn532_wait_until_ready(PN532_WAIT_UNTIL_READY_TIMEOUT)) {
-		BA->printf("send data: timeout\n\r");
-		return false;
+	if(pn532_read_ack(PN532_READ_ACK_TIMEOUT)) {
+		return true;
 	}
 
-	pn532_send_data_wo_timeout(data, length);
-
-	return true;
+	return false;
 }
 
 uint8_t spibb_transceive_byte(const uint8_t value) {

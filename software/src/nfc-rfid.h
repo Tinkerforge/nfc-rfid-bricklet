@@ -111,10 +111,8 @@ bool pn532_sam_configure_mode_normal(void);
 bool pn532_wait_until_ready(uint32_t timeout);
 uint8_t pn532_status(void);
 bool pn532_read_ack(uint32_t timeout);
-bool pn532_read_data(uint8_t *data, uint8_t length);
-void pn532_read_data_wo_timeout(uint8_t *data, uint8_t length);
+bool pn532_read_response(uint8_t *data, uint8_t length);
 bool pn532_send_data(uint8_t *data, uint8_t length);
-void pn532_send_data_wo_timeout(uint8_t *data, uint8_t length);
 uint8_t spibb_transceive_byte(const uint8_t value);
 
 
