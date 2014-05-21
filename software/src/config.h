@@ -41,7 +41,7 @@
 #define BRICKLET_DEVICE_IDENTIFIER 246
 
 #define LOGGING_LEVEL LOGGING_DEBUG
-#define DEBUG_BRICKLET 1
+#define DEBUG_BRICKLET 0
 
 #define BRICKLET_NO_OFFSET
 #define BRICKLET_VALUE_APPLIED_OUTSIDE
@@ -55,10 +55,37 @@
 #define PIN_SCK  (BS->pin3_pwm)
 #define PIN_MISO (BS->pin4_io)
 
+#define BUFFER_LENGTH 32
+
 typedef struct {
-	uint8_t state;
-	uint32_t tick;
-	uint8_t counter;
+	State state_before;
+	State state;
+	uint8_t state_inner;
+	uint16_t state_wait;
+	uint16_t state_wait_inner;
+	uint16_t state_wait_ack;
+
+	uint8_t target_type;
+
+	uint8_t buffer[32];
+
+	uint8_t read_byte_i;
+	uint8_t write_byte_i;
+
+	uint8_t authenticate_page;
+	uint8_t authenticate_key[KEY_MAX_LENGTH];
+	uint8_t authenticate_key_number;
+	uint8_t authenticate_tid[TID_MAX_LENGTH];
+
+	uint8_t tid_length;
+	uint8_t tid_target_type;
+	uint8_t tid[TID_MAX_LENGTH];
+
+	uint16_t data_write_page;
+	uint8_t data_write[PAGE_MAX_LENGTH];
+
+	uint16_t data_read_page;
+	uint8_t data_read[PAGE_MAX_LENGTH];
 } BrickContext;
 
 #endif
