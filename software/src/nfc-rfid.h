@@ -149,7 +149,7 @@ typedef struct {
 typedef struct {
 	MessageHeader header;
 	uint8_t tag_type;
-	uint16_t tid_length;
+	uint8_t tid_length;
 	uint8_t tid[TID_MAX_LENGTH];
 } __attribute__((__packed__)) GetTagIDReturn;
 
