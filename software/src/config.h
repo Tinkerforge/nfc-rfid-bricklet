@@ -65,7 +65,7 @@ typedef struct {
 	uint16_t state_wait_inner;
 	uint16_t state_wait_ack;
 
-	uint8_t target_type;
+	uint8_t tag_type;
 
 	uint8_t buffer[32];
 
@@ -78,7 +78,7 @@ typedef struct {
 	uint8_t authenticate_tid[TID_MAX_LENGTH];
 
 	uint8_t tid_length;
-	uint8_t tid_target_type;
+	uint8_t tid_tag_type;
 	uint8_t tid[TID_MAX_LENGTH];
 
 	uint16_t data_write_page;

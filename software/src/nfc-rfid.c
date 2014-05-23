@@ -159,7 +159,7 @@ void tick(const uint8_t tick_type) {
 
 void request_tag_id(const ComType com, const RequestTagID *data) {
 	if(BC->state & STATE_IDLE_MASK) {
-		BC->target_type = data->target_type;
+		BC->tag_type = data->tag_type;
 		BC->state = STATE_REQUEST_TAG_ID;
 		BA->com_return_setter(com, data);
 	} else {
@@ -171,7 +171,7 @@ void get_tag_id(const ComType com, const GetTagID *data) {
 	GetTagIDReturn gptidr;
 	gptidr.header        = data->header;
 	gptidr.header.length = sizeof(GetTagIDReturn);
-	gptidr.target_type   = BC->tid_target_type;
+	gptidr.tag_type      = BC->tid_tag_type;
 	gptidr.tid_length    = BC->tid_length;
 
 	for(uint8_t i = 0; i < TID_MAX_LENGTH; i++) {
@@ -196,7 +196,7 @@ void get_state(const ComType com, const GetState *data) {
 }
 
 void authenticate_mifare_classic_page(const ComType com, const AuthenticateMifareClassicPage *data) {
-	if((BC->state & STATE_IDLE_MASK) && BC->target_type == TARGET_TYPE_MIFARE) {
+	if((BC->state & STATE_IDLE_MASK) && BC->tag_type == TAG_TYPE_MIFARE) {
 		BC->authenticate_key_number = data->key_number;
 		BC->authenticate_page = data->page;
 		memcpy(BC->authenticate_key, data->key, KEY_MAX_LENGTH);
@@ -305,8 +305,8 @@ void pn532_write_page(void) {
 			command[0] = PN532_COMMAND_INDATAEXCHANGE;
 			command[1] = 1;
 			uint8_t write_length = 0;
-			switch(BC->target_type) {
-				case TARGET_TYPE_MIFARE: {
+			switch(BC->tag_type) {
+				case TAG_TYPE_MIFARE: {
 					command[2] = MIFARE_CMD_WRITE;
 					command[3] = BC->data_write_page;
 					memcpy(&command[4], BC->data_write, PAGE_MAX_LENGTH);
@@ -315,7 +315,7 @@ void pn532_write_page(void) {
 					break;
 				}
 
-				case TARGET_TYPE_TYPE1: {
+				case TAG_TYPE_TYPE1: {
 					command[2] = JEWEL_CMD_WRITEE;
 					command[3] = ((BC->data_write_page + BC->write_byte_i/8) << 3) + (BC->write_byte_i % 8);
 					command[4] = BC->data_write[BC->write_byte_i];
@@ -324,7 +324,7 @@ void pn532_write_page(void) {
 					break;
 				}
 
-				case TARGET_TYPE_TYPE2: {
+				case TAG_TYPE_TYPE2: {
 					command[2] = TYPE2_CMD_WRITE;
 					command[3] = BC->data_write_page + BC->write_byte_i/4;
 					for(uint8_t i = 0; i < 4; i++) {
@@ -370,18 +370,18 @@ void pn532_write_page(void) {
 		case STATE_INNER_READ_RESPONSE: {
 			uint8_t *response = BC->buffer;
 			if(pn532_read_response(response, BUFFER_LENGTH) >= 0) {
-				switch(BC->target_type) {
-					case TARGET_TYPE_MIFARE: {
+				switch(BC->tag_type) {
+					case TAG_TYPE_MIFARE: {
 						BC->write_byte_i = 16;
 						break;
 					}
 
-					case TARGET_TYPE_TYPE1: {
+					case TAG_TYPE_TYPE1: {
 						BC->write_byte_i++;
 						break;
 					}
 
-					case TARGET_TYPE_TYPE2: {
+					case TAG_TYPE_TYPE2: {
 						BC->write_byte_i+=4;
 						break;
 					}
@@ -425,7 +425,7 @@ void pn532_read_page(void) {
 				BC->data_read_page
 			};
 
-			if(BC->target_type == TARGET_TYPE_TYPE1) {
+			if(BC->tag_type == TAG_TYPE_TYPE1) {
 				command[2] = JEWEL_CMD_READ;
 				command[3] = ((BC->data_read_page + BC->read_byte_i/8) << 3) + (BC->read_byte_i % 8);
 			}
@@ -455,7 +455,7 @@ void pn532_read_page(void) {
 		case STATE_INNER_READ_RESPONSE: {
 			uint8_t *response = BC->buffer;
 
-			if(BC->target_type == TARGET_TYPE_TYPE1) {
+			if(BC->tag_type == TAG_TYPE_TYPE1) {
 				if(pn532_read_response(response, BUFFER_LENGTH) >= 0) {
 					BC->data_read[BC->read_byte_i] = response[2];
 
@@ -503,7 +503,7 @@ void pn532_read_tag_id(void) {
 			const uint8_t command[] = {
 				PN532_COMMAND_INLISTPASSIVETARGET,
 				1, // One card
-				BC->target_type == TARGET_TYPE_TYPE1 ? PN532_INNOVISION_JEWEL : PN532_MIFARE_ISO14443A
+				BC->tag_type == TAG_TYPE_TYPE1 ? PN532_INNOVISION_JEWEL : PN532_MIFARE_ISO14443A
 			};
 
 			if(BC->state_wait_ack == 0) {
@@ -531,7 +531,7 @@ void pn532_read_tag_id(void) {
 		case STATE_INNER_READ_RESPONSE: {
 			uint8_t *response = BC->buffer;
 
-			const uint8_t tid_start = BC->target_type == TARGET_TYPE_TYPE1 ? 5 : 7;
+			const uint8_t tid_start = BC->tag_type == TAG_TYPE_TYPE1 ? 5 : 7;
 
 			if(pn532_read_response(response, BUFFER_LENGTH) >= 0) {
 				// TODO: Sanity check of response values
@@ -543,13 +543,13 @@ void pn532_read_tag_id(void) {
 				uint8_t tid_length = 4;
 
 				// Differentiate between Mifare and Type 2 by ID length
-				if((BC->target_type == TARGET_TYPE_MIFARE && response[6] != 4) ||
-				   (BC->target_type == TARGET_TYPE_TYPE2 && response[6] != 7)) {
+				if((BC->tag_type == TAG_TYPE_MIFARE && response[6] != 4) ||
+				   (BC->tag_type == TAG_TYPE_TYPE2 && response[6] != 7)) {
 					BC->state_inner = 0;
 					BC->state_wait = TIMEOUT_WAIT_ERROR;
 					BC->state = STATE_REQUEST_TAG_ID_ERROR;
 				} else {
-					if(BC->target_type != TARGET_TYPE_TYPE1) {
+					if(BC->tag_type != TAG_TYPE_TYPE1) {
 						sel = response[5];
 						tid_length = MIN(response[6], TID_MAX_LENGTH);
 					}
@@ -562,7 +562,7 @@ void pn532_read_tag_id(void) {
 						}
 					}
 					BC->tid_length = tid_length;
-					BC->tid_target_type = BC->target_type;
+					BC->tid_tag_type = BC->tag_type;
 
 					BC->state_inner = 0;
 					BC->state_wait = 1;

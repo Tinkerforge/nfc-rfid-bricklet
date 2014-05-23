@@ -139,7 +139,7 @@
 
 typedef struct {
 	MessageHeader header;
-	uint8_t target_type;
+	uint8_t tag_type;
 } __attribute__((__packed__)) RequestTagID;
 
 typedef struct {
@@ -148,7 +148,7 @@ typedef struct {
 
 typedef struct {
 	MessageHeader header;
-	uint8_t target_type;
+	uint8_t tag_type;
 	uint16_t tid_length;
 	uint8_t tid[TID_MAX_LENGTH];
 } __attribute__((__packed__)) GetTagIDReturn;
@@ -225,10 +225,10 @@ typedef enum {
 } StateInner;
 
 typedef enum {
-	TARGET_TYPE_MIFARE = 0,
-	TARGET_TYPE_TYPE1 = 1,
-	TARGET_TYPE_TYPE2 = 2
-} TargetType;
+	TAG_TYPE_MIFARE = 0,
+	TAG_TYPE_TYPE1 = 1,
+	TAG_TYPE_TYPE2 = 2
+} TagType;
 
 
 void invocation(const ComType com, const uint8_t *data);
