@@ -51,7 +51,7 @@ int main() {
 	}
 	// Don't use device before ipcon is connected
 
-	// Register current callback to function cb_state_changed
+	// Register state changed callback to function cb_state_changed
 	nfc_rfid_register_callback(&nfc,
 	                           NFC_RFID_CALLBACK_STATE_CHANGED,
 	                           (void *)cb_state_changed,
