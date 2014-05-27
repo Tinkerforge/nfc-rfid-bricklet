@@ -25,10 +25,10 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		uint8_t ret_tid[7];
 		nfc_rfid_get_tag_id(nfc, &ret_tag_type, &ret_tid_length, ret_tid);
 		if(ret_tid_length == 4) {
-			printf("Found Tag of type %d with ID [%x %x %x %x]\n", 
+			printf("Found tag of type %d with ID [%x %x %x %x]\n", 
 			       ret_tag_type, ret_tid[0], ret_tid[1], ret_tid[2], ret_tid[3]);
 		} else {
-			printf("Found Tag of type %d with ID [%x %x %x %x %x %x %x]\n", 
+			printf("Found tag of type %d with ID [%x %x %x %x %x %x %x]\n", 
 			       ret_tag_type, ret_tid[0], ret_tid[1], ret_tid[2], ret_tid[3], 
 			       ret_tid[4], ret_tid[5], ret_tid[6]);
 		}
@@ -57,7 +57,7 @@ int main() {
 	                           (void *)cb_state_changed,
 	                           &nfc);
 
-	nfc_rfid_request_tag_id(&nfc, 0);
+	nfc_rfid_request_tag_id(&nfc, NFC_RFID_TAG_TYPE_MIFARE_CLASSIC);
 
 	printf("Press key to exit\n");
 	getchar();

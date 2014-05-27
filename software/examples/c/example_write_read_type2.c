@@ -63,7 +63,7 @@ int main() {
 	                           &nfc);
 
 	// Select NFC Forum Type 2 tag
-	nfc_rfid_request_tag_id(&nfc, 2);
+	nfc_rfid_request_tag_id(&nfc, NFC_RFID_TAG_TYPE_TYPE2);
 
 	printf("Press key to exit\n");
 	getchar();
