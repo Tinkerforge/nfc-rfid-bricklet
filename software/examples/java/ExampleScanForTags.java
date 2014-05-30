@@ -28,7 +28,7 @@ public class ExampleScanForTags {
 
 					if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
 						BrickletNFCRFID.TagID tagID = nfc.getTagID();
-						String s = "Fount tag of type " + tagID.tagType + 
+						String s = "Found tag of type " + tagID.tagType + 
 						           " with ID [" + Integer.toHexString(tagID.tid[0]);
 						if(tagID.tidLength == 7) {
 							for(int i = 1; i < 7; i++) {
