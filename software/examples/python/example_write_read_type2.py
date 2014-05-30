@@ -8,8 +8,6 @@ UID = "hjw" # Change to your UID
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_nfc_rfid import NFCRFID
 
-tag_type = 0
-
 # Callback function for state changed callback
 def cb_state_changed(state, idle, nfc):
     if state == nfc.STATE_REQUEST_TAG_ID_READY:
