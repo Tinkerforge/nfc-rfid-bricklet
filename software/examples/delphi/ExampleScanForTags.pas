@@ -40,7 +40,7 @@ begin
 
   if state = BRICKLET_NFC_RFID_STATE_REQUEST_TAG_ID_READY then begin
     sender.GetTagID(newTagType, tidLength, tid);
-	s := 'Fount tag of type ' + IntToStr(newTagType);
+	s := 'Found tag of type ' + IntToStr(newTagType);
 	s := s + ' with ID [' + IntToHex(tid[0], 2);
     if tidLength = 7 then begin
       for i:= 1 to 6 do begin
