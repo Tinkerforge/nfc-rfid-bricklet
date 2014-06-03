@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <head>
+        <title>Tinkerforge | JavaScript Example</title>
+    </head>
+    <body>
+        <div style="text-align:center;">
+            <h1>NFC/RFID Bricklet Scan For Tags Example</h1>
+            <p>
+                <input value="localhost" id="host" type="text" size="20">:
+                <input value="4280" id="port" type="text" size="5">,
+                <input value="uid" id="uid" type="text" size="5">
+                <input value="Start Example" id="start" type="button" onclick="startExample();">
+            </p>
+            <p>
+                <textarea id="text" cols="80" rows="24" style="resize:none;"
+                          >Press "Start Example" to begin ...</textarea>
+            </p>
+        <div>
+        <script src="./Tinkerforge.js" type='text/javascript'></script>
+        <script type='text/javascript'>
+            var ipcon;
+            var textArea = document.getElementById("text");
+            function startExample() {
+                textArea.value = "";
+                var HOST = document.getElementById("host").value;
+                var PORT = parseInt(document.getElementById("port").value);
+                var UID = document.getElementById("uid").value;
+                if(ipcon !== undefined) {
+                    ipcon.disconnect();
+                }
+                ipcon = new Tinkerforge.IPConnection(); // Create IP connection
+                var nfc = new Tinkerforge.BrickletNFCRFID(UID, ipcon); // Create device object
+
+                ipcon.connect(HOST, PORT,
+                    function(error) {
+                        textArea.value += 'Error: ' + error + '\n';
+                    }
+                ); // Connect to brickd
+                // Don't use device before ipcon is connected
+
+                ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
+                    function(connectReason) {
+                        // Select NFC Forum Type 2 tag
+                        nfc.requestTagID(Tinkerforge.BrickletNFCRFID.TAG_TYPE_TYPE2);
+                    }
+                );
+
+                // Register state changed callback
+                nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
+                    // Callback function for state change callback
+                    function(state, idle) {
+                        if(state == Tinkerforge.BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
+                            textArea.value += "Tag found\n";
+
+                            // Write 16 byte to pages 5-8
+                            var dataWrite = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+                            nfc.writePage(5, dataWrite);
+                            textArea.value += "Writing data...\n";
+                        } else if(state == Tinkerforge.BrickletNFCRFID.STATE_WRITE_PAGE_READY) {
+                            // Request pages 5-8
+                            nfc.requestPage(5);
+                            textArea.value += "Requesting data...\n";
+                        } else if(state == Tinkerforge.BrickletNFCRFID.STATE_REQUEST_PAGE_READY) {
+                            // Get and print pages
+                            nfc.getPage(
+                                function(data) {
+                                    var s = 'Read data: [' + data[0];
+                                    for(var i = 1; i < data.length; i++) {
+                                        s += ', ' + data[i].toString();
+                                    }
+
+                                    s += ']\n';
+                                    textArea.value += s;
+                                }
+                            );
+                        } else if((state & (1 << 6)) == (1 << 6)) {
+                            // All errors have bit 6 set
+                            textArea.value += "Error: " + state + '\n';
+                        }
+                    }
+                );
+
+                textArea.value += "Press any key to exit ...";
+                process.stdin.on('data',
+                    function(data) {
+                        ipcon.disconnect();
+                        process.exit(0);
+                    }
+                );
+            }
+        </script>
+    </body>
+</html>
