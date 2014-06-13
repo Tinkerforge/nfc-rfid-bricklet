@@ -50,10 +50,10 @@
 
 #define BOARD_MCK 64000000
 
-#define PIN_MOSI (BS->pin1_ad)
-#define PIN_NSS  (BS->pin2_da)
-#define PIN_SCK  (BS->pin3_pwm)
-#define PIN_MISO (BS->pin4_io)
+#define PIN_SCK (BS->pin1_ad)
+#define PIN_MISO  (BS->pin2_da)
+#define PIN_MOSI  (BS->pin3_pwm)
+#define PIN_NSS (BS->pin4_io)
 
 #define BUFFER_LENGTH 32
 
