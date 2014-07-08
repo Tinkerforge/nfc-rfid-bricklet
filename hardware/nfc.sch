@@ -1,5 +1,4 @@
 EESchema Schematic File Version 2
-LIBS:tinkerforge
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -30,7 +29,6 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:nfc-cache
 EELAYER 24 0
 EELAYER END
 $Descr A4 11693 8268
@@ -1059,7 +1057,7 @@ L R_PACK4 RP1
 U 1 1 5379C763
 P 2000 2300
 F 0 "RP1" H 2000 2750 40  0000 C CNN
-F 1 "100" H 2000 2250 40  0000 C CNN
+F 1 "270" H 2000 2250 40  0000 C CNN
 F 2 "0603X4" H 2000 2300 60  0001 C CNN
 F 3 "" H 2000 2300 60  0000 C CNN
 	1    2000 2300
