@@ -51,7 +51,7 @@ public class ExampleScanForTags {
 
 		nfc.requestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
 
-		System.console().readLine("Press key to exit\n");
+		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();
 	}
 }

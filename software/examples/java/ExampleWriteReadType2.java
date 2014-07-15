@@ -55,7 +55,7 @@ public class ExampleWriteReadType2 {
 		// Select NFC Forum Type 2 tag
 		nfc.requestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
 
-		System.console().readLine("Press key to exit\n");
+		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();
 	}
 }
