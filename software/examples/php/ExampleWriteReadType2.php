@@ -33,16 +33,17 @@ function cb_state_changed($state, $idle)
 		// Get and print pages
 		$data = $nfc->getPage();
 		echo "Read data: [" . $data[0];
+
 		for($i = 1; $i < count($data); $i++) {
-			echo ", " . $data[$i];
+			echo " " . $data[$i];
 		}
+
 		echo "]\n";
 	} else if(($state & (1 << 6)) == (1 << 6)) {
 		// All errors have bit 6 set
 		echo "Error: " . $state . "\n";
 	}
 }
-
 
 $ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected

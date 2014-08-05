@@ -1,5 +1,5 @@
 function matlab_example_write_read_type2()
-	more off;
+    more off;
 
     global nfc;
 
@@ -17,7 +17,7 @@ function matlab_example_write_read_type2()
     % Don't use device before ipcon is connected
 
     % Register state changed callback to function cb_state_changed
-	nfc.addStateChangedCallback(@cb_state_changed);
+    nfc.addStateChangedCallback(@cb_state_changed);
     
     % Select NFC Forum Type 2 tag
     nfc.requestTagID(nfc.TAG_TYPE_TYPE2);

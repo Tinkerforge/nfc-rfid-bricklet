@@ -15,24 +15,27 @@ sub cb_state_changed
 {
 	my ($state, $idle) = @_;
 
-	if($state == $nfc->STATE_REQUEST_TAG_ID_READY) {
+	if($state == Tinkerforge::BrickletNFCRFID->STATE_REQUEST_TAG_ID_READY) {
 		print "Tag found\n";
 
 		# Write 16 byte to pages 5-8
 		my @data_write = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
 		$nfc->write_page(5, @data_write);
 		print "Writing data...\n";
-	} elsif($state == $nfc->STATE_WRITE_PAGE_READY) {
+	} elsif($state == Tinkerforge::BrickletNFCRFID->STATE_WRITE_PAGE_READY) {
 		# Request pages 5-8
 		$nfc->request_page(5);
 		print "Requesting data...\n";
-	} elsif($state == $nfc->STATE_REQUEST_PAGE_READY) {
+	} elsif($state == Tinkerforge::BrickletNFCRFID->STATE_REQUEST_PAGE_READY) {
 		# Get and print pages
 		my @data = $nfc->get_page();
 		my $s = "Read data: [" . $data[0];
-		for($i = 1; $i < scalar @data; $i++) {
-			$s = $s . ", " . $data[$i];
+
+		for(my $i = 1; $i < scalar @data; $i++) {
+			$s = $s . " " . $data[$i];
 		}
+
 		$s = $s . "]\n";
 
 		print $s;

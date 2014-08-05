@@ -9,7 +9,7 @@ use constant UID => 'hjw'; # Change to your UID
 
 my $ipcon = Tinkerforge::IPConnection->new(); # Create IP connection
 my $nfc = Tinkerforge::BrickletNFCRFID->new(&UID, $ipcon); # Create device object
-my $tag_type = 0;
+my $current_tag_type = 0;
 
 # Callback function for state changed callback
 sub cb_state_changed
@@ -17,16 +17,18 @@ sub cb_state_changed
 	my ($state, $idle) = @_;
 
 	if($idle) {
-		$tag_type = ($tag_type + 1) % 3;
-		$nfc->request_tag_id($tag_type);
+		$current_tag_type = ($current_tag_type + 1) % 3;
+		$nfc->request_tag_id($current_tag_type);
 	}
 
 	if($state == $nfc->STATE_REQUEST_TAG_ID_READY) {
-		my ($tag_type_new, $tid_length, $tid) = $nfc->get_tag_id();
+		my ($tag_type, $tid_length, $tid) = $nfc->get_tag_id();
 		my $s = "Found tag of type " . $tag_type . " with ID [" . sprintf("%x", @{$tid}[0]);
-		for($i = 1; $i < $tid_length; $i++) {
-			$s = $s . ", " . sprintf("%x", @{$tid}[$i]);
+
+		for(my $i = 1; $i < $tid_length; $i++) {
+			$s = $s . " " . sprintf("%x", @{$tid}[$i]);
 		}
+
 		$s = $s . "]\n";
 
 		print $s;

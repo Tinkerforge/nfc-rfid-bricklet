@@ -11,7 +11,7 @@ type
   private
     ipcon: TIPConnection;
     nfc: TBrickletNFCRFID;
-    tagType: byte;
+    currentTagType: byte;
   public
     procedure StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
     procedure Execute;
@@ -27,30 +27,23 @@ var
 
 { Callback function for state changed callback }
 procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
-  var newTagType: byte;
+  var tagType: byte;
   var tidLength: byte;
-  var tid: Array[0..6] of byte;
-  var s: String;
+  var tid: array [0..6] of byte;
+  var s: string;
   var i: byte;
 begin
   if idle then begin
-    tagType := (tagType + 1) Mod 3;
-    sender.RequestTagID(tagType);
+    currentTagType := (currentTagType + 1) Mod 3;
+    sender.RequestTagID(currentTagType);
   end;
 
   if state = BRICKLET_NFC_RFID_STATE_REQUEST_TAG_ID_READY then begin
-    sender.GetTagID(newTagType, tidLength, tid);
-	s := 'Found tag of type ' + IntToStr(newTagType);
-	s := s + ' with ID [' + IntToHex(tid[0], 2);
-    if tidLength = 7 then begin
-      for i:= 1 to 6 do begin
-        s := s + ', ' + IntToHex(tid[i], 2);
-      end;
-    end
-    else begin
-      for i:= 1 to 3 do begin
-        s := s + ', ' + IntToHex(tid[i], 2);
-      end;
+    sender.GetTagID(tagType, tidLength, tid);
+    s := 'Found tag of type ' + IntToStr(tagType);
+    s := s + ' with ID [' + IntToHex(tid[0], 2);
+    for i := 1 to (tidLength - 1) do begin
+      s := s + ' ' + IntToHex(tid[i], 2);
     end;
     s := s + ']';
     WriteLn(s);
@@ -72,8 +65,8 @@ begin
   { Register state changed callback to procedure StateChangedCB }
   nfc.OnStateChanged := {$ifdef FPC}@{$endif}StateChangedCB;
   
-  tagType := BRICKLET_NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
-  nfc.RequestTagID(tagType);
+  currentTagType := BRICKLET_NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
+  nfc.RequestTagID(currentTagType);
 
   WriteLn('Press key to exit');
   ReadLn;

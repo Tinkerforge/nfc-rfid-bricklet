@@ -28,13 +28,14 @@ function cb_state_changed($state, $idle)
 	if($state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY) {
 		$ret = $nfc->getTagID();
 		echo "Found tag of type " . $ret["tag_type"] . " with ID [" . $ret["tid"][0];
+
 		for($i = 1; $i < $ret["tid_length"]; $i++) {
-			echo ", " . dechex($ret["tid"][$i]);
+			echo " " . dechex($ret["tid"][$i]);
 		}
+
 		echo "]\n";
 	}
 }
-
 
 $ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected

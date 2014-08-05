@@ -26,9 +26,9 @@ var
 
 { Callback function for state changed callback }
 procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
-  const dataWrite: Array[0..15] of byte = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+  const dataWrite: array [0..15] of byte = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
   var s: String;
-  var dataRead: Array[0..15] of byte;
+  var dataRead: array [0..15] of byte;
   var i: byte;
 begin
   if state = BRICKLET_NFC_RFID_STATE_REQUEST_TAG_ID_READY then begin
@@ -47,7 +47,7 @@ begin
     dataRead := sender.GetPage();
     s := 'Read data: [' + IntToStr(dataRead[0]);
     for i:= 1 to 15 do begin
-      s := s + ', ' + IntToStr(dataRead[i]);
+      s := s + ' ' + IntToStr(dataRead[i]);
     end;
     s := s + ']';
     WriteLn(s);

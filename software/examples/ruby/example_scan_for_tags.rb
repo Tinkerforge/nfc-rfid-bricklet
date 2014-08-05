@@ -12,7 +12,7 @@ UID = 'hjw' # Change to your UID
 
 ipcon = IPConnection.new # Create IP connection
 nfc = BrickletNFCRFID.new UID, ipcon # Create device object
-tag_type = 0
+current_tag_type = 0
 
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
@@ -20,13 +20,13 @@ ipcon.connect HOST, PORT # Connect to brickd
 # Register state changed callback
 nfc.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
   if idle
-    tag_type = (tag_type + 1) % 3
-	nfc.request_tag_id tag_type
+    current_tag_type = (current_tag_type + 1) % 3
+    nfc.request_tag_id current_tag_type
   end
 
   if state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY
-    tag_type_new, tid_length, tid = nfc.get_tag_id
-    puts "Found tag of type #{tag_type_new} with ID " +
+    tag_type, tid_length, tid = nfc.get_tag_id
+    puts "Found tag of type #{tag_type} with ID " +
          "#{tid.take(tid_length).each.map { |b| b.to_s(16) }.join ' '}"
   end
 end

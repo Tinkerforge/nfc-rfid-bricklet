@@ -1,5 +1,5 @@
 function octave_example_scan_for_tags()
-	more off;
+    more off;
 
     global nfc;
     global tag_type;
@@ -16,7 +16,7 @@ function octave_example_scan_for_tags()
     % Don't use device before ipcon is connected
 
     % Register state changed callback to function cb_state_changed
-	nfc.addStateChangedCallback(@cb_state_changed);
+    nfc.addStateChangedCallback(@cb_state_changed);
     
     nfc.requestTagID(nfc.TAG_TYPE_MIFARE_CLASSIC);
 
@@ -37,6 +37,7 @@ function cb_state_changed(e)
     
     if e.state == nfc.STATE_REQUEST_TAG_ID_READY
         ret = nfc.getTagID();
+
         if ret.tidLength == 4
             fprintf('Found tag of type %d with ID [%x %x %x %x]\n', ...
                     ret.tagType, ret.tid(1), ret.tid(2), ret.tid(3), ret.tid(4));
@@ -45,6 +46,5 @@ function cb_state_changed(e)
                     ret.tagType, ret.tid(1), ret.tid(2), ret.tid(3), ret.tid(4), ...
                     ret.tid(5), ret.tid(6), ret.tid(7));
         end
-        
     end
 end

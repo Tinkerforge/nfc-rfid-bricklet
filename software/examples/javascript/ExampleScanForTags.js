@@ -35,14 +35,9 @@ nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
                 function(tagType, tidLength, tid) {
                     var s = 'Found tag of type ' + tagType +
                             ' with ID [' + tid[0].toString(16);
-                    if(tidLength == 7) {
-                        for(var i = 1; i < 7; i++) {
-                            s += ', ' + tid[i].toString(16);
-                        }
-                    } else {
-                        for(var i = 1; i < 4; i++) {
-                            s += ', ' + tid[i].toString(16);
-                        }
+
+                    for(var i = 1; i < tidLength; i++) {
+                        s += ' ' + tid[i].toString(16);
                     }
 
                     s += ']';

@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 
 #include "ip_connection.h"
@@ -8,29 +7,32 @@
 #define PORT 4223
 #define UID "hjw" // Change to your UID
 
+uint8_t current_tag_type = NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
+
 // Callback function for state changed callback 
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {
-	static uint8_t tag_type = 0;
-	NFCRFID *nfc = (NFCRFID*)user_data;
+	NFCRFID *nfc = (NFCRFID *)user_data;
 
 	// Cycle through all types
 	if(idle) {
-		tag_type = (tag_type + 1) % 3;
-		nfc_rfid_request_tag_id(nfc, tag_type);
+		current_tag_type = (current_tag_type + 1) % 3;
+
+		nfc_rfid_request_tag_id(nfc, current_tag_type);
 	}
 
 	if(state == NFC_RFID_STATE_REQUEST_TAG_ID_READY) {
-		uint8_t ret_tag_type;
-		uint8_t ret_tid_length;
-		uint8_t ret_tid[7];
-		nfc_rfid_get_tag_id(nfc, &ret_tag_type, &ret_tid_length, ret_tid);
-		if(ret_tid_length == 4) {
+		uint8_t tag_type;
+		uint8_t tid_length;
+		uint8_t tid[7];
+
+		nfc_rfid_get_tag_id(nfc, &tag_type, &tid_length, tid);
+
+		if(tid_length == 4) {
 			printf("Found tag of type %d with ID [%x %x %x %x]\n", 
-			       ret_tag_type, ret_tid[0], ret_tid[1], ret_tid[2], ret_tid[3]);
+			       tag_type, tid[0], tid[1], tid[2], tid[3]);
 		} else {
 			printf("Found tag of type %d with ID [%x %x %x %x %x %x %x]\n", 
-			       ret_tag_type, ret_tid[0], ret_tid[1], ret_tid[2], ret_tid[3], 
-			       ret_tid[4], ret_tid[5], ret_tid[6]);
+			       tag_type, tid[0], tid[1], tid[2], tid[3], tid[4], tid[5], tid[6]);
 		}
 	}
 }

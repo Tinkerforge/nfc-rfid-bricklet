@@ -15,6 +15,7 @@ class Example
 
 			// Write 16 byte to pages 5-8
 			byte[] dataWrite = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
 			sender.WritePage(5, dataWrite);
 			System.Console.WriteLine("Writing data...");
 		}
@@ -29,10 +30,12 @@ class Example
 			// Get and print pages
 			byte[] data = sender.GetPage();
 			string str = "" + data[0];
+
 			for(int i = 1; i < data.Length; i++)
 			{
-				str += ", " + data[i];
+				str += " " + data[i];
 			}
+
 			System.Console.Write("Read data: [" + str + "]");
 		}
 		else if((state & (1 << 6)) == (1 << 6))
@@ -42,7 +45,7 @@ class Example
 		}
 	}
 
-	static void Main() 
+	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
 		BrickletNFCRFID nfc = new BrickletNFCRFID(UID, ipcon); // Create device object
@@ -59,5 +62,5 @@ class Example
 		System.Console.WriteLine("Press key to exit");
 		System.Console.ReadKey();
 		ipcon.Disconnect();
-    }
+	}
 }

@@ -72,19 +72,19 @@ class NdefMessage:
             # NDEF TLV
             # NDEF message
             # Terminator TLV
-            raw_data = self.capability_container +\
-                       [0x01, 0x03, 0xF2, 0x30, 0x33, 0x02, 0x03, 0xF0, 0x02, 0x03] +\
-                       tlv_ndef +\
-                       raw_data +\
+            raw_data = self.capability_container + \
+                       [0x01, 0x03, 0xF2, 0x30, 0x33, 0x02, 0x03, 0xF0, 0x02, 0x03] + \
+                       tlv_ndef + \
+                       raw_data + \
                        [0xFE] 
         elif self.tag_type == NFCRFID.TAG_TYPE_TYPE2:
             # CC set by set_capability_container
             # NDEF TLV
             # NDEF message
             # Terminator TLV
-            raw_data = self.capability_container +\
-                       tlv_ndef +\
-                       raw_data +\
+            raw_data = self.capability_container + \
+                       tlv_ndef + \
+                       raw_data + \
                        [0xFE]
         else:
             # TODO: We could support TAG_TYPE_MIFARE_CLASSIC here, but mifare classic
@@ -204,7 +204,6 @@ class NdefRecord:
             header.extend(self.identifier)
 
         return header + self.payload
-
 
 class NdefTextRecord(NdefRecord):
     # Call with text and ISO/IANA language code
@@ -348,4 +347,3 @@ if __name__ == '__main__':
         print('Could not write NDEF Message: ' + str(ret))
     else:
         print('NDEF Message written successfully')
-

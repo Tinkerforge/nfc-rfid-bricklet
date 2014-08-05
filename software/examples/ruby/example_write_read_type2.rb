@@ -32,7 +32,7 @@ nfc.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
   elsif state == BrickletNFCRFID::STATE_REQUEST_PAGE_READY
     # Get and print pages
     data = nfc.get_page
-	puts "Read data: #{data}"
+    puts "Read data: #{data}"
   elsif (state & (1 << 6)) == (1 << 6)
     # All errors have bit 6 set
     puts "Error: #{state}"

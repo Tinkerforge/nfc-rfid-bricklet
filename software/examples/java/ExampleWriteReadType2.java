@@ -16,7 +16,6 @@ public class ExampleWriteReadType2 {
 		ipcon.connect(host, port); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-
 		// Add and implement state changed listener (called if state changes)
 		nfc.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
 			public void stateChanged(short state, boolean idle) {
@@ -26,6 +25,7 @@ public class ExampleWriteReadType2 {
 
 						// Write 16 byte to pages 5-8
 						short[] dataWrite = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
 						nfc.writePage(5, dataWrite);
 						System.out.println("Writing data...");
 					} else if(state == BrickletNFCRFID.STATE_WRITE_PAGE_READY) {
@@ -36,9 +36,11 @@ public class ExampleWriteReadType2 {
 						// Get and print pages
 						short[] data = nfc.getPage();
 						String s = "Read data: [" + data[0];
+
 						for(int i = 1; i < data.length; i++) {
-							s += ", " + data[i];
+							s += " " + data[i];
 						}
+
 						s += "]";
 						System.out.println(s);
 					} else if((state & (1 << 6)) == (1 << 6)) {

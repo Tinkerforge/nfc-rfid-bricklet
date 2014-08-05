@@ -29,7 +29,6 @@ def cb_state_changed(state, idle, nfc):
         # All errors have bit 6 set
         print('Error: ' + str(state))
 
-
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection
     nfc = NFCRFID(UID, ipcon) # Create device object

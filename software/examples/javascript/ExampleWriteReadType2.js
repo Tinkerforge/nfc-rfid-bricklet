@@ -30,6 +30,7 @@ nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
 
             // Write 16 byte to pages 5-8
             var dataWrite = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
             nfc.writePage(5, dataWrite);
             console.log("Writing data...");
         } else if(state == Tinkerforge.BrickletNFCRFID.STATE_WRITE_PAGE_READY) {
@@ -41,8 +42,9 @@ nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
             nfc.getPage(
                 function(data) {
                     var s = 'Read data: [' + data[0];
+
                     for(var i = 1; i < data.length; i++) {
-                        s += ', ' + data[i].toString();
+                        s += ' ' + data[i].toString();
                     }
 
                     s += ']';
