@@ -1,0 +1,51 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="abc"(* Change to your UID *)
+
+(* Create IPConnection and device object *)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+nfc=NETNew["Tinkerforge.BrickletNFCRFID",uid,ipcon]
+ipcon@Connect[host,port]
+
+(* Callback function for state changed callback *)
+StateChangedCB[sender_,state_,idle_]:=
+ Module[{},
+ If[state==Tinkerforge`BrickletNFCRFID`STATEUREQUESTUTAGUIDUREADY,
+   Print["Tag found"];
+
+   (* Write 16 byte to pages 5-8 *)
+   dataWrite={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+   sender@WritePage[5,dataWrite];
+   Print["Writing data..."];
+  ];
+  If[state==Tinkerforge`BrickletNFCRFID`STATEUWRITEUPAGEUREADY,
+   (* Request pages 5-8 *)
+   sender@RequestPage[5];
+   Print["Requesting data..."];
+  ];
+  If[state==Tinkerforge`BrickletNFCRFID`STATEUREQUESTUPAGEUREADY,
+   (* Get and print pages 5-8 *)
+   dataRead=sender@GetPage[];
+   result={ToString[dataRead[[1]]]};
+   For[i=2,i<=16,++i,AppendTo[result," "<>ToString[dataRead[[i]]]]];
+   Print["Read data: ["<>StringJoin[result]<>"]"]
+  ];
+  If[IntegerDigits[state,2,8][[2]]==1,
+   (* All errors have bit 6 set *)
+   Print["Error: "<>ToString[state]<>"  "<>ToString[IntegerDigits[state,2,8]]]
+  ]
+ ]
+
+AddEventHandler[nfc@StateChanged,StateChangedCB]
+
+nfc@RequestTagID[Tinkerforge`BrickletNFCRFID`TAGUTYPEUTYPE2]
+
+Input["Click OK to exit"]
+
+(* Clean up *)
+ipcon@Disconnect[]
+ReleaseNETObject[nfc]
+ReleaseNETObject[ipcon]

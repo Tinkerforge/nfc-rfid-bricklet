@@ -1,0 +1,42 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="abc"(* Change to your UID *)
+
+(* Create IPConnection and device object *)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+nfc=NETNew["Tinkerforge.BrickletNFCRFID",uid,ipcon]
+ipcon@Connect[host,port]
+
+currentTageType=Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC
+
+(* Callback function for state changed callback *)
+StateChangedCB[sender_,state_,idle_]:=
+ Module[{},
+  If[idle,
+   currentTageType=Mod[currentTageType+1,3];
+   sender@RequestTagID[currentTageType]
+  ];
+  If[state==Tinkerforge`BrickletNFCRFID`STATEUREQUESTUTAGUIDUREADY,
+   tagType=0;tidLength=0;tid={};
+   sender@GetTagID[tagType,tidLength,tid];
+   result={ToString[tid[[1]]]};
+   For[i=2,i<=tidLength,++i,
+    AppendTo[result," "<>ToString[tid[[i]]]]
+   ];
+   Print["Found tag of type "<>ToString[tagType]<>" with ID ["<>StringJoin[result]<>"]"]
+  ]
+ ]
+
+AddEventHandler[nfc@StateChanged,StateChangedCB]
+
+nfc@RequestTagID[currentTageType]
+
+Input["Click OK to exit"]
+
+(* Clean up *)
+ipcon@Disconnect[]
+ReleaseNETObject[nfc]
+ReleaseNETObject[ipcon]
