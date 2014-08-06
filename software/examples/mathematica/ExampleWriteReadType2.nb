@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[     10734,        242]
-NotebookOptionsPosition[     10300,        221]
-NotebookOutlinePosition[     10638,        236]
-CellTagsIndexPosition[     10595,        233]
+NotebookDataLength[     10588,        239]
+NotebookOptionsPosition[     10154,        218]
+NotebookOutlinePosition[     10492,        233]
+CellTagsIndexPosition[     10449,        230]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -156,10 +156,7 @@ Cell[BoxData[{
           "set"}], " ", "*)"}], "\[IndentingNewLine]", 
         RowBox[{"Print", "[", 
          RowBox[{"\"\<Error: \>\"", "<>", 
-          RowBox[{"ToString", "[", "state", "]"}], "<>", "\"\<  \>\"", "<>", 
-          RowBox[{"ToString", "[", 
-           RowBox[{"IntegerDigits", "[", 
-            RowBox[{"state", ",", "2", ",", "8"}], "]"}], "]"}]}], "]"}]}], 
+          RowBox[{"ToString", "[", "state", "]"}]}], "]"}]}], 
        "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
@@ -217,10 +214,10 @@ Cell[BoxData[{
    3.616317573015606*^9, 3.616317604322405*^9}, {3.616317719502481*^9, 
    3.616317772190762*^9}, {3.6163178306115837`*^9, 3.616317870481496*^9}, 
    3.616317967156001*^9, {3.6163180454813747`*^9, 3.616318051266551*^9}, {
-   3.616318120182467*^9, 3.6163181365625772`*^9}}]
+   3.616318120182467*^9, 3.6163181365625772`*^9}, 3.6163215058259583`*^9}]
 },
 WindowSize->{1521, 867},
-WindowMargins->{{Automatic, 90}, {69, Automatic}},
+WindowMargins->{{Automatic, 89}, {68, Automatic}},
 FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
 StyleDefinitions->"Default.nb"
 ]
@@ -236,7 +233,7 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[400, 13, 848, 14, 55, "Input"],
-Cell[1251, 29, 9045, 190, 1067, "Input"]
+Cell[1251, 29, 8899, 187, 1067, "Input"]
 }
 ]
 *)

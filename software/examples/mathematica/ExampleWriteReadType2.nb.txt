@@ -35,7 +35,7 @@ StateChangedCB[sender_,state_,idle_]:=
   ];
   If[IntegerDigits[state,2,8][[2]]==1,
    (* All errors have bit 6 set *)
-   Print["Error: "<>ToString[state]<>"  "<>ToString[IntegerDigits[state,2,8]]]
+   Print["Error: "<>ToString[state]]
   ]
  ]
 
