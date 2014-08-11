@@ -8,7 +8,7 @@ use constant PORT => 4223;
 use constant UID => 'hjw'; # Change to your UID
 
 my $ipcon = Tinkerforge::IPConnection->new(); # Create IP connection
-my $nfc = Tinkerforge::BrickletNFCRFID->new(&UID, $ipcon); # Create device object
+our $nfc = Tinkerforge::BrickletNFCRFID->new(&UID, $ipcon); # Create device object
 
 # Callback function for state changed callback
 sub cb_state_changed
