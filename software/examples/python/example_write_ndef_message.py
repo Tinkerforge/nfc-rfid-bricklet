@@ -248,9 +248,9 @@ class ExampleNdef:
     tag_type = None
     tag_size = None
 
-    def __init__(self, tag_type, tag_size):
+    def __init__(self, tag_type, tag_size=512):
         self.tag_type = tag_type
-        self.tag_size = 512
+        self.tag_size = tag_size
         self.ipcon = IPConnection() # Create IP connection
         self.nfc = NFCRFID(self.UID, self.ipcon) # Create device object
 
