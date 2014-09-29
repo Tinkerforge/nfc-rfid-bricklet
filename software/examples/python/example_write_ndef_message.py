@@ -328,7 +328,8 @@ class ExampleNdef:
         self.message.add_record(rec2)
         rec3 = NdefUriRecord('tinkerforge.com', NdefRecord.NDEF_URIPREFIX_HTTP_WWWDOT)
         self.message.add_record(rec3)
-        rec4 = NdefMediaRecord('text/html', '<html><head><title>Hello</title></head><body>World!</body></html>')
+        text = '<html><head><title>Hello</title></head><body>World!</body></html>'
+        rec4 = NdefMediaRecord('text/html', text)
         self.message.add_record(rec4)
 
         # To test an "image/png" you can can download the file from:
