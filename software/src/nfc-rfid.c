@@ -97,11 +97,17 @@ void constructor(void) {
 	BC->state_before = STATE_INITIALIZATION;
 
 	PIN_NSS.pio->PIO_CODR = PIN_NSS.mask;
-	SLEEP_MS(1100);
+	BC->startup_counter = 0;
 }
 
 void tick(const uint8_t tick_type) {
 	if(tick_type & TICK_TASK_TYPE_CALCULATION) {
+		// Asynchronously wait for 1100ms until pn532 is ready
+		if(BC->startup_counter < 1100) {
+			BC->startup_counter++;
+			return;
+		}
+
 		if(BC->state_wait_inner > 0) {
 			BC->state_wait_inner--;
 		}

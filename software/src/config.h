@@ -86,6 +86,8 @@ typedef struct {
 
 	uint16_t data_read_page;
 	uint8_t data_read[PAGE_MAX_LENGTH];
+
+	uint16_t startup_counter;
 } BrickContext;
 
 #endif
