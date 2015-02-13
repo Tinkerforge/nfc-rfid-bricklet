@@ -45,7 +45,7 @@ Module ExampleCallback
         nfc.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC)
 
         System.Console.WriteLine("Press key to exit")
-        System.Console.ReadKey()
+        System.Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module
