@@ -29,12 +29,12 @@ var
 procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
   var tagType: byte;
   var tidLength: byte;
-  var tid: array [0..6] of byte;
+  var tid: {$ifdef FPC}array [0..6] of byte{$else}TArray0To6OfUInt8{$endif};
   var s: string;
   var i: byte;
 begin
   if idle then begin
-    currentTagType := (currentTagType + 1) Mod 3;
+    currentTagType := (currentTagType + 1) mod 3;
     sender.RequestTagID(currentTagType);
   end;
 
