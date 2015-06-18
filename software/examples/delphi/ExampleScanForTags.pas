@@ -13,7 +13,8 @@ type
     nfc: TBrickletNFCRFID;
     currentTagType: byte;
   public
-    procedure StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
+    procedure StateChangedCB(sender: TBrickletNFCRFID;
+                             const state: byte; const idle: boolean);
     procedure Execute;
   end;
 
@@ -26,7 +27,8 @@ var
   e: TExample;
 
 { Callback function for state changed callback }
-procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
+procedure TExample.StateChangedCB(sender: TBrickletNFCRFID;
+                                  const state: byte; const idle: boolean);
   var tagType: byte;
   var tidLength: byte;
   var tid: {$ifdef FPC}array [0..6] of byte{$else}TArray0To6OfUInt8{$endif};

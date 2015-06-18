@@ -8,7 +8,8 @@ Module ExampleCallback
     Private currentTagType As Byte = 0
 
     ' Callback function for state changed callback
-    Sub StateChangedCB(ByVal sender As BrickletNFCRFID, ByVal state As Byte, ByVal idle As Boolean)
+    Sub StateChangedCB(ByVal sender As BrickletNFCRFID, _
+                       ByVal state As Byte, ByVal idle As Boolean)
         If idle Then
             currentTagType = Convert.ToByte((currentTagType + 1) Mod 3)
             sender.requestTagID(currentTagType)
