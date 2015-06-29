@@ -41,7 +41,7 @@ function cb_state_changed(e)
     elseif short2int(e.state) == short2int(nfc.STATE_REQUEST_PAGE_READY)
         % Get and print pages
         data = nfc.getPage();
-        fprintf("Read data: [%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x]\n",
+        fprintf("Read data: [%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d]\n",
                 short2int(data(1)), short2int(data(2)), short2int(data(3)), short2int(data(4)),
                 short2int(data(5)), short2int(data(6)), short2int(data(7)), short2int(data(8)),
                 short2int(data(9)), short2int(data(10)), short2int(data(11)), short2int(data(12)),
