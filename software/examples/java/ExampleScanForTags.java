@@ -11,22 +11,22 @@ public class ExampleScanForTags {
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		final BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
+		final BrickletNFCRFID nr = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Add and implement state changed listener (called if state changes)
-		nfc.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
+		nr.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
 			public void stateChanged(short state, boolean idle) {
 				try {
 					if(idle) {
 						currentTagType = (short)((currentTagType + 1) % 3);
-						nfcrfid.requestTagID(currentTagType);
+						nr.requestTagID(currentTagType);
 					}
 
 					if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
-						BrickletNFCRFID.TagID tagID = nfcrfid.getTagID();
+						BrickletNFCRFID.TagID tagID = nr.getTagID();
 						String s = "Found tag of type " + tagID.tagType + 
 						           " with ID [" + Integer.toHexString(tagID.tid[0]);
 
@@ -44,7 +44,7 @@ public class ExampleScanForTags {
 			}
 		});
 
-		nfcrfid.requestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
+		nr.requestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
 
 		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();

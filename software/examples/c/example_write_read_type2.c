@@ -52,8 +52,8 @@ int main() {
 	ipcon_create(&ipcon);
 
 	// Create device object
-	NFCRFID nfcrfid;
-	nfc_rfid_create(&nfcrfid, UID, &ipcon);
+	NFCRFID nr;
+	nfc_rfid_create(&nr, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {

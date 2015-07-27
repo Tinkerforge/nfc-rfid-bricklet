@@ -256,20 +256,20 @@ class ExampleNdef:
 
         self.ipcon.connect(self.HOST, self.PORT) # Connect to brickd
 
-        self.nfc.register_callback(self.nfc.CALLBACK_STATE_CHANGED, self.state_changed)
+        self.nr.register_callback(self.nr.CALLBACK_STATE_CHANGED, self.state_changed)
 
     def write_message(self):
         chunks = self.message.get_raw_data_in_chunks()
         print("Trying to write the follwing data to the tag:")
         pprint(chunks)
 
-        self.nfc.request_tag_id(self.tag_type)
+        self.nr.request_tag_id(self.tag_type)
         state = self.state_queue.get()
-        if state != self.nfc.STATE_REQUEST_TAG_ID:
+        if state != self.nr.STATE_REQUEST_TAG_ID:
             return -1
 
         state = self.state_queue.get()
-        if state != self.nfc.STATE_REQUEST_TAG_ID_READY:
+        if state != self.nr.STATE_REQUEST_TAG_ID_READY:
             return -2
         
         # NFC Forum Type 1 start page is 1 (start of capability container)
@@ -280,13 +280,13 @@ class ExampleNdef:
             current_page = 3
 
         for chunk in chunks:
-            self.nfc.write_page(current_page, chunk)
+            self.nr.write_page(current_page, chunk)
             state = self.state_queue.get()
-            if state != self.nfc.STATE_WRITE_PAGE:
+            if state != self.nr.STATE_WRITE_PAGE:
                 return -3
 
             state = self.state_queue.get()
-            if state != self.nfc.STATE_WRITE_PAGE_READY:
+            if state != self.nr.STATE_WRITE_PAGE_READY:
                 return -4
 
             # NFC Forum Type 1 has 2 pages per chunk (16 byte)

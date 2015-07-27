@@ -48,16 +48,16 @@ class Example
 	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
+		BrickletNFCRFID nr = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Register state changed callback to function StateChangedCB
-		nfcrfid.StateChanged += StateChangedCB;
+		nr.StateChanged += StateChangedCB;
 
 		// Select NFC Forum Type 2 tag
-		nfcrfid.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
+		nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
 
 		System.Console.WriteLine("Press enter to exit");
 		System.Console.ReadLine();

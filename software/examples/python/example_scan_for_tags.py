@@ -11,15 +11,15 @@ from tinkerforge.bricklet_nfc_rfid import NFCRFID
 tag_type = 0
 
 # Callback function for state changed callback
-def cb_state_changed(state, idle, nfc):
+def cb_state_changed(state, idle, nr):
     # Cycle through all types
     if idle:
         global tag_type
         tag_type = (tag_type + 1) % 3
-        nfc.request_tag_id(tag_type)
+        nr.request_tag_id(tag_type)
 
-    if state == nfc.STATE_REQUEST_TAG_ID_READY:
-        ret = nfc.get_tag_id()
+    if state == nr.STATE_REQUEST_TAG_ID_READY:
+        ret = nr.get_tag_id()
         print('Found tag of type ' +
               str(ret.tag_type) +
               ' with ID [' +
@@ -28,16 +28,16 @@ def cb_state_changed(state, idle, nfc):
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection
-    nfcrfid = NFCRFID(UID, ipcon) # Create device object
+    nr = NFCRFID(UID, ipcon) # Create device object
 
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
     # Register state changed callback to function cb_state_changed
-    nfc.register_callback(nfc.CALLBACK_STATE_CHANGED, 
-                          lambda x, y: cb_state_changed(x, y, nfc))
+    nr.register_callback(nr.CALLBACK_STATE_CHANGED,
+                         lambda x, y: cb_state_changed(x, y, nr))
 
-    nfc.request_tag_id(nfc.TAG_TYPE_MIFARE_CLASSIC)
+    nr.request_tag_id(nr.TAG_TYPE_MIFARE_CLASSIC)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
     ipcon.disconnect()

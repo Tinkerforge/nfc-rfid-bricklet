@@ -42,15 +42,15 @@ class Example
 	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
+		BrickletNFCRFID nr = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Register state changed callback to function StateChangedCB
-		nfcrfid.StateChanged += StateChangedCB;
+		nr.StateChanged += StateChangedCB;
 
-		nfcrfid.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
+		nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
 
 		System.Console.WriteLine("Press enter to exit");
 		System.Console.ReadLine();

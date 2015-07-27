@@ -10,13 +10,13 @@ public class ExampleWriteReadType2 {
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		final BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
+		final BrickletNFCRFID nr = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Add and implement state changed listener (called if state changes)
-		nfc.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
+		nr.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
 			public void stateChanged(short state, boolean idle) {
 				try {
 					if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
@@ -25,15 +25,15 @@ public class ExampleWriteReadType2 {
 						// Write 16 byte to pages 5-8
 						short[] dataWrite = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
-						nfcrfid.writePage(5, dataWrite);
+						nr.writePage(5, dataWrite);
 						System.out.println("Writing data...");
 					} else if(state == BrickletNFCRFID.STATE_WRITE_PAGE_READY) {
 						// Request pages 5-8
-						nfcrfid.requestPage(5);
+						nr.requestPage(5);
 						System.out.println("Requesting data...");
 					} else if(state == BrickletNFCRFID.STATE_REQUEST_PAGE_READY) {
 						// Get and print pages
-						short[] data = nfcrfid.getPage();
+						short[] data = nr.getPage();
 						String s = "Read data: [" + data[0];
 
 						for(int i = 1; i < data.length; i++) {
@@ -54,7 +54,7 @@ public class ExampleWriteReadType2 {
 		});
 
 		// Select NFC Forum Type 2 tag
-		nfcrfid.requestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
+		nr.requestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
 
 		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();
