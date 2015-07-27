@@ -8,30 +8,30 @@ include Tinkerforge
 
 HOST = 'localhost'
 PORT = 4223
-UID = 'hjw' # Change to your UID
+UID = 'XYZ' # Change to your UID
 
 ipcon = IPConnection.new # Create IP connection
-nfc = BrickletNFCRFID.new UID, ipcon # Create device object
+nfcrfid = BrickletNFCRFID.new UID, ipcon # Create device object
 
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
 # Register state changed callback
-nfc.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
+nfcrfid.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
   if state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY
     puts "Tag found"
 
     # Write 16 byte to pages 5-8
     data_write = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    nfc.write_page 5, data_write
+    nfcrfid.write_page 5, data_write
     puts "Writing data..."
   elsif state == BrickletNFCRFID::STATE_WRITE_PAGE_READY
     # Request pages 5-8
-    nfc.request_page 5
+    nfcrfid.request_page 5
     puts "Requesting data..."
   elsif state == BrickletNFCRFID::STATE_REQUEST_PAGE_READY
     # Get and print pages
-    data = nfc.get_page
+    data = nfcrfid.get_page
     puts "Read data: #{data}"
   elsif (state & (1 << 6)) == (1 << 6)
     # All errors have bit 6 set
@@ -40,7 +40,7 @@ nfc.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
 end
 
 # Select NFC Forum Type 2 tag
-nfc.request_tag_id(BrickletNFCRFID::TAG_TYPE_TYPE2)
+nfcrfid.request_tag_id(BrickletNFCRFID::TAG_TYPE_TYPE2)
 
 puts 'Press key to exit'
 $stdin.gets

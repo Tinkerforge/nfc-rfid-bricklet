@@ -1,19 +1,19 @@
-import com.tinkerforge.BrickletNFCRFID;
 import com.tinkerforge.IPConnection;
+import com.tinkerforge.BrickletNFCRFID;
 
 public class ExampleScanForTags {
-	private static final String host = "localhost";
-	private static final int port = 4223;
-	private static final String UID = "hjw"; // Change to your UID
+	private static final String HOST = "localhost";
+	private static final int PORT = 4223;
+	private static final String UID = "XYZ"; // Change to your UID
 	private static short currentTagType = 0;
-	
+
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
-	//       might normally want to catch are described in the commnents below
+	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		final BrickletNFCRFID nfc = new BrickletNFCRFID(UID, ipcon); // Create device object
+		final BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
 
-		ipcon.connect(host, port); // Connect to brickd
+		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Add and implement state changed listener (called if state changes)
@@ -22,11 +22,11 @@ public class ExampleScanForTags {
 				try {
 					if(idle) {
 						currentTagType = (short)((currentTagType + 1) % 3);
-						nfc.requestTagID(currentTagType);
+						nfcrfid.requestTagID(currentTagType);
 					}
 
 					if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
-						BrickletNFCRFID.TagID tagID = nfc.getTagID();
+						BrickletNFCRFID.TagID tagID = nfcrfid.getTagID();
 						String s = "Found tag of type " + tagID.tagType + 
 						           " with ID [" + Integer.toHexString(tagID.tid[0]);
 
@@ -44,7 +44,7 @@ public class ExampleScanForTags {
 			}
 		});
 
-		nfc.requestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
+		nfcrfid.requestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
 
 		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();

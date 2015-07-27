@@ -4,7 +4,7 @@ class Example
 {
 	private static string HOST = "localhost";
 	private static int PORT = 4223;
-	private static string UID = "hjw"; // Change to your UID
+	private static string UID = "XYZ"; // Change to your UID
 
 	// Callback function for state changed callback
 	static void StateChangedCB(BrickletNFCRFID sender, byte state, bool idle)
@@ -48,16 +48,16 @@ class Example
 	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletNFCRFID nfc = new BrickletNFCRFID(UID, ipcon); // Create device object
+		BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Register state changed callback to function StateChangedCB
-		nfc.StateChanged += StateChangedCB;
+		nfcrfid.StateChanged += StateChangedCB;
 
 		// Select NFC Forum Type 2 tag
-		nfc.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
+		nfcrfid.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
 
 		System.Console.WriteLine("Press enter to exit");
 		System.Console.ReadLine();

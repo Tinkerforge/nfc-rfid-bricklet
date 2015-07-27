@@ -5,19 +5,19 @@
 
 #define HOST "localhost"
 #define PORT 4223
-#define UID "hjw" // Change to your UID
+#define UID "XYZ" // Change to your UID
 
 uint8_t current_tag_type = NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
 
 // Callback function for state changed callback 
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {
-	NFCRFID *nfc = (NFCRFID *)user_data;
+	NFCRFID *nfcrfid = (NFCRFID *)user_data;
 
 	// Cycle through all types
 	if(idle) {
 		current_tag_type = (current_tag_type + 1) % 3;
 
-		nfc_rfid_request_tag_id(nfc, current_tag_type);
+		nfc_rfid_request_tag_id(nfcrfid, current_tag_type);
 	}
 
 	if(state == NFC_RFID_STATE_REQUEST_TAG_ID_READY) {
@@ -25,7 +25,7 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		uint8_t tid_length;
 		uint8_t tid[7];
 
-		nfc_rfid_get_tag_id(nfc, &tag_type, &tid_length, tid);
+		nfc_rfid_get_tag_id(nfcrfid, &tag_type, &tid_length, tid);
 
 		if(tid_length == 4) {
 			printf("Found tag of type %d with ID [%x %x %x %x]\n", 
@@ -38,13 +38,13 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 }
 
 int main() {
-	// Create ip connection to brickd
+	// Create IP connection
 	IPConnection ipcon;
 	ipcon_create(&ipcon);
 
 	// Create device object
-	NFCRFID nfc;
-	nfc_rfid_create(&nfc, UID, &ipcon);
+	NFCRFID nfcrfid;
+	nfc_rfid_create(&nfcrfid, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -54,12 +54,12 @@ int main() {
 	// Don't use device before ipcon is connected
 
 	// Register state changed callback to function cb_state_changed
-	nfc_rfid_register_callback(&nfc,
+	nfc_rfid_register_callback(&nfcrfid,
 	                           NFC_RFID_CALLBACK_STATE_CHANGED,
 	                           (void *)cb_state_changed,
-	                           &nfc);
+	                           &nfcrfid);
 
-	nfc_rfid_request_tag_id(&nfc, NFC_RFID_TAG_TYPE_MIFARE_CLASSIC);
+	nfc_rfid_request_tag_id(&nfcrfid, NFC_RFID_TAG_TYPE_MIFARE_CLASSIC);
 
 	printf("Press key to exit\n");
 	getchar();

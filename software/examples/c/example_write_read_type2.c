@@ -5,11 +5,11 @@
 
 #define HOST "localhost"
 #define PORT 4223
-#define UID "hjw" // Change to your UID
+#define UID "XYZ" // Change to your UID
 
 // Callback function for state changed callback
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {
-	NFCRFID *nfc = (NFCRFID*)user_data;
+	NFCRFID *nfcrfid = (NFCRFID*)user_data;
 
 	(void)idle; // avoid unused parameter warning
 
@@ -19,12 +19,12 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		// Write 16 byte to pages 5-8
 		uint8_t data_write[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
-		nfc_rfid_write_page(nfc, 5, data_write);
+		nfc_rfid_write_page(nfcrfid, 5, data_write);
 
 		printf("Writing data...\n");
 	} else if(state == NFC_RFID_STATE_WRITE_PAGE_READY) {
 		// Request pages 5-8
-		nfc_rfid_request_page(nfc, 5);
+		nfc_rfid_request_page(nfcrfid, 5);
 
 		printf("Requesting data...\n");
 	} else if(state == NFC_RFID_STATE_REQUEST_PAGE_READY) {
@@ -32,7 +32,7 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		uint8_t i;
 
 		// Get and print pages 5-8
-		nfc_rfid_get_page(nfc, data_read);
+		nfc_rfid_get_page(nfcrfid, data_read);
 		printf("Read data: [%d", data_read[0]);
 
 		for(i = 1; i < 16; i++) {
@@ -47,13 +47,13 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 }
 
 int main() {
-	// Create ip connection to brickd
+	// Create IP connection
 	IPConnection ipcon;
 	ipcon_create(&ipcon);
 
 	// Create device object
-	NFCRFID nfc;
-	nfc_rfid_create(&nfc, UID, &ipcon);
+	NFCRFID nfcrfid;
+	nfc_rfid_create(&nfcrfid, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -63,13 +63,13 @@ int main() {
 	// Don't use device before ipcon is connected
 
 	// Register state changed callback to function cb_state_changed
-	nfc_rfid_register_callback(&nfc,
+	nfc_rfid_register_callback(&nfcrfid,
 	                           NFC_RFID_CALLBACK_STATE_CHANGED,
 	                           (void *)cb_state_changed,
-	                           &nfc);
+	                           &nfcrfid);
 
 	// Select NFC Forum Type 2 tag
-	nfc_rfid_request_tag_id(&nfc, NFC_RFID_TAG_TYPE_TYPE2);
+	nfc_rfid_request_tag_id(&nfcrfid, NFC_RFID_TAG_TYPE_TYPE2);
 
 	printf("Press key to exit\n");
 	getchar();

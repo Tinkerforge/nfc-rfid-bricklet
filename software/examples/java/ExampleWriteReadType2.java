@@ -1,19 +1,18 @@
-import com.tinkerforge.BrickletNFCRFID;
 import com.tinkerforge.IPConnection;
+import com.tinkerforge.BrickletNFCRFID;
 
 public class ExampleWriteReadType2 {
-	private static final String host = "localhost";
-	private static final int port = 4223;
-	private static final String UID = "hjw"; // Change to your UID
-	private static short tagType = 0;
-	
+	private static final String HOST = "localhost";
+	private static final int PORT = 4223;
+	private static final String UID = "XYZ"; // Change to your UID
+
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
-	//       might normally want to catch are described in the commnents below
+	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		final BrickletNFCRFID nfc = new BrickletNFCRFID(UID, ipcon); // Create device object
+		final BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
 
-		ipcon.connect(host, port); // Connect to brickd
+		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Add and implement state changed listener (called if state changes)
@@ -26,15 +25,15 @@ public class ExampleWriteReadType2 {
 						// Write 16 byte to pages 5-8
 						short[] dataWrite = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
-						nfc.writePage(5, dataWrite);
+						nfcrfid.writePage(5, dataWrite);
 						System.out.println("Writing data...");
 					} else if(state == BrickletNFCRFID.STATE_WRITE_PAGE_READY) {
 						// Request pages 5-8
-						nfc.requestPage(5);
+						nfcrfid.requestPage(5);
 						System.out.println("Requesting data...");
 					} else if(state == BrickletNFCRFID.STATE_REQUEST_PAGE_READY) {
 						// Get and print pages
-						short[] data = nfc.getPage();
+						short[] data = nfcrfid.getPage();
 						String s = "Read data: [" + data[0];
 
 						for(int i = 1; i < data.length; i++) {
@@ -55,7 +54,7 @@ public class ExampleWriteReadType2 {
 		});
 
 		// Select NFC Forum Type 2 tag
-		nfc.requestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
+		nfcrfid.requestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
 
 		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();

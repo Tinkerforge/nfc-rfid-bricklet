@@ -4,7 +4,7 @@ class Example
 {
 	private static string HOST = "localhost";
 	private static int PORT = 4223;
-	private static string UID = "hjw"; // Change to your UID
+	private static string UID = "XYZ"; // Change to your UID
 
 	private static byte currentTagType = BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC;
 
@@ -39,18 +39,18 @@ class Example
 		}
 	}
 
-	static void Main() 
+	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletNFCRFID nfc = new BrickletNFCRFID(UID, ipcon); // Create device object
+		BrickletNFCRFID nfcrfid = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Register state changed callback to function StateChangedCB
-		nfc.StateChanged += StateChangedCB;
+		nfcrfid.StateChanged += StateChangedCB;
 
-		nfc.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
+		nfcrfid.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
 
 		System.Console.WriteLine("Press enter to exit");
 		System.Console.ReadLine();
