@@ -9,7 +9,7 @@
 
 // Callback function for state changed callback
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {
-	NFCRFID *nfcrfid = (NFCRFID*)user_data;
+	NFCRFID *nr = (NFCRFID *)user_data;
 
 	(void)idle; // avoid unused parameter warning
 
@@ -19,12 +19,12 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		// Write 16 byte to pages 5-8
 		uint8_t data_write[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
-		nfc_rfid_write_page(nfcrfid, 5, data_write);
+		nfc_rfid_write_page(nr, 5, data_write);
 
 		printf("Writing data...\n");
 	} else if(state == NFC_RFID_STATE_WRITE_PAGE_READY) {
 		// Request pages 5-8
-		nfc_rfid_request_page(nfcrfid, 5);
+		nfc_rfid_request_page(nr, 5);
 
 		printf("Requesting data...\n");
 	} else if(state == NFC_RFID_STATE_REQUEST_PAGE_READY) {
@@ -32,7 +32,7 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		uint8_t i;
 
 		// Get and print pages 5-8
-		nfc_rfid_get_page(nfcrfid, data_read);
+		nfc_rfid_get_page(nr, data_read);
 		printf("Read data: [%d", data_read[0]);
 
 		for(i = 1; i < 16; i++) {
@@ -63,13 +63,13 @@ int main() {
 	// Don't use device before ipcon is connected
 
 	// Register state changed callback to function cb_state_changed
-	nfc_rfid_register_callback(&nfcrfid,
+	nfc_rfid_register_callback(&nr,
 	                           NFC_RFID_CALLBACK_STATE_CHANGED,
 	                           (void *)cb_state_changed,
-	                           &nfcrfid);
+	                           &nr);
 
 	// Select NFC Forum Type 2 tag
-	nfc_rfid_request_tag_id(&nfcrfid, NFC_RFID_TAG_TYPE_TYPE2);
+	nfc_rfid_request_tag_id(&nr, NFC_RFID_TAG_TYPE_TYPE2);
 
 	printf("Press key to exit\n");
 	getchar();
