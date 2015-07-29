@@ -1,2 +1,5 @@
-2.0.0: Initial version
-2.0.1: Asynchronously wait until pn532 is ready (fixes RED Brick incompatibility)
+2.0.0:
+- Initial version
+
+2.0.1:
+- Asynchronously wait until PN532 is ready (fixes RED Brick incompatibility)
