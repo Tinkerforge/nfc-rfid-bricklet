@@ -6,7 +6,7 @@ PORT = 4223
 UID = "XYZ" # Change to your UID
 
 from tinkerforge.ip_connection import IPConnection
-from tinkerforge.bricklet_nfc_rfid import NFCRFID
+from tinkerforge.bricklet_nfc_rfid import BrickletNFCRFID
 
 # Callback function for state changed callback
 def cb_state_changed(state, idle, nr):
@@ -31,7 +31,7 @@ def cb_state_changed(state, idle, nr):
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection
-    nr = NFCRFID(UID, ipcon) # Create device object
+    nr = BrickletNFCRFID(UID, ipcon) # Create device object
 
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
