@@ -1,4 +1,4 @@
-program ExampleCallback;
+program ExampleScanForTags;
 
 {$ifdef MSWINDOWS}{$apptype CONSOLE}{$endif}
 {$ifdef FPC}{$mode OBJFPC}{$H+}{$endif}
@@ -10,7 +10,7 @@ type
   TExample = class
   private
     ipcon: TIPConnection;
-    nfc: TBrickletNFCRFID;
+    nr: TBrickletNFCRFID;
     currentTagType: byte;
   public
     procedure StateChangedCB(sender: TBrickletNFCRFID;
@@ -21,7 +21,7 @@ type
 const
   HOST = 'localhost';
   PORT = 4223;
-  UID = 'hjw'; { Change to your UID }
+  UID = 'XYZ'; { Change to your UID }
 
 var
   e: TExample;
@@ -58,17 +58,17 @@ begin
   ipcon := TIPConnection.Create;
 
   { Create device object }
-  nfc := TBrickletNFCRFID.Create(UID, ipcon);
+  nr := TBrickletNFCRFID.Create(UID, ipcon);
 
   { Connect to brickd }
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
   { Register state changed callback to procedure StateChangedCB }
-  nfc.OnStateChanged := {$ifdef FPC}@{$endif}StateChangedCB;
+  nr.OnStateChanged := {$ifdef FPC}@{$endif}StateChangedCB;
   
   currentTagType := BRICKLET_NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
-  nfc.RequestTagID(currentTagType);
+  nr.RequestTagID(currentTagType);
 
   WriteLn('Press key to exit');
   ReadLn;
