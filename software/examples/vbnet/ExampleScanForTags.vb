@@ -1,9 +1,9 @@
 Imports Tinkerforge
 
-Module ExampleCallback
+Module ExampleScanForTags
     Const HOST As String = "localhost"
     Const PORT As Integer = 4223
-    Const UID As String = "hjw" ' Change to your UID
+    Const UID As String = "XYZ" ' Change to your UID
 
     Private currentTagType As Byte = 0
 
@@ -35,15 +35,15 @@ Module ExampleCallback
 
     Sub Main()
         Dim ipcon As New IPConnection() ' Create IP connection
-        Dim nfc As New BrickletNFCRFID(UID, ipcon) ' Create device object
+        Dim nr As New BrickletNFCRFID(UID, ipcon) ' Create device object
 
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
         ' Register state changed callback to function StateChangedCB
-        AddHandler nfc.StateChanged, AddressOf StateChangedCB
+        AddHandler nr.StateChanged, AddressOf StateChangedCB
 
-        nfc.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC)
+        nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC)
 
         System.Console.WriteLine("Press key to exit")
         System.Console.ReadLine()
