@@ -29,12 +29,12 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 		printf("Requesting data...\n");
 	} else if(state == NFC_RFID_STATE_REQUEST_PAGE_READY) {
 		uint8_t data_read[16];
-		uint8_t i;
 
 		// Get and print pages 5-8
 		nfc_rfid_get_page(nr, data_read);
 		printf("Read data: [%d", data_read[0]);
 
+		int i;
 		for(i = 1; i < 16; i++) {
 			printf(" %d", data_read[i]);
 		}
