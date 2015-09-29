@@ -31,7 +31,8 @@ nr.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
   end
 end
 
-nr.request_tag_id(BrickletNFCRFID::TAG_TYPE_MIFARE_CLASSIC)
+# Start scan loop
+nr.request_tag_id BrickletNFCRFID::TAG_TYPE_MIFARE_CLASSIC
 
 puts 'Press key to exit'
 $stdin.gets

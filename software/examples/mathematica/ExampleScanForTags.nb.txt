@@ -3,16 +3,16 @@ LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
 
 host="localhost"
 port=4223
-uid="abc"(* Change to your UID *)
+uid="XYZ"(*Change to your UID*)
 
-(* Create IPConnection and device object *)
+(*Create IPConnection and device object*)
 ipcon=NETNew["Tinkerforge.IPConnection"]
-nfc=NETNew["Tinkerforge.BrickletNFCRFID",uid,ipcon]
+nr=NETNew["Tinkerforge.BrickletNFCRFID",uid,ipcon]
 ipcon@Connect[host,port]
 
 currentTageType=Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC
 
-(* Callback function for state changed callback *)
+(*Callback function for state changed callback*)
 StateChangedCB[sender_,state_,idle_]:=
  Module[{},
   If[idle,
@@ -30,13 +30,14 @@ StateChangedCB[sender_,state_,idle_]:=
   ]
  ]
 
-AddEventHandler[nfc@StateChanged,StateChangedCB]
+AddEventHandler[nr@StateChanged,StateChangedCB]
 
-nfc@RequestTagID[currentTageType]
+(*Start scan loop*)
+nr@RequestTagID[BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC]
 
 Input["Click OK to exit"]
 
-(* Clean up *)
+(*Clean up*)
 ipcon@Disconnect[]
-ReleaseNETObject[nfc]
+ReleaseNETObject[nr]
 ReleaseNETObject[ipcon]

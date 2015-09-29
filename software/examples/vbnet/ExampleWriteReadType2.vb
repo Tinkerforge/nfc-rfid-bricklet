@@ -1,3 +1,4 @@
+Imports System
 Imports Tinkerforge
 
 Module ExampleWriteReadType2
@@ -5,7 +6,7 @@ Module ExampleWriteReadType2
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change to your UID
 
-    ' Callback function for state changed callback
+    ' Callback subroutine for state changed callback
     Sub StateChangedCB(ByVal sender As BrickletNFCRFID, ByVal state As Byte, ByVal idle As Boolean)
         If state = BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY Then
             System.Console.WriteLine("Tag found")
@@ -40,14 +41,14 @@ Module ExampleWriteReadType2
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Register state changed callback to function StateChangedCB
+        ' Register state changed callback to subroutine StateChangedCB
         AddHandler nr.StateChanged, AddressOf StateChangedCB
 
         ' Select NFC Forum Type 2 tag
         nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2)
 
-        System.Console.WriteLine("Press key to exit")
-        System.Console.ReadLine()
+        Console.WriteLine("Press key to exit")
+        Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module

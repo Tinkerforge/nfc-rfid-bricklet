@@ -6,7 +6,7 @@
     </head>
     <body>
         <div style="text-align:center;">
-            <h1>NFC/RFID Bricklet Write and Ready Type 2 Example</h1>
+            <h1>NFC/RFID Bricklet Write Read Type2 Example</h1>
             <p>
                 <input value="localhost" id="host" type="text" size="20">:
                 <input value="4280" id="port" type="text" size="5">,
@@ -31,8 +31,7 @@
                     ipcon.disconnect();
                 }
                 ipcon = new Tinkerforge.IPConnection(); // Create IP connection
-                var nfc = new Tinkerforge.BrickletNFCRFID(UID, ipcon); // Create device object
-
+                var nr = new Tinkerforge.BrickletNFCRFID(UID, ipcon); // Create device object
                 ipcon.connect(HOST, PORT,
                     function(error) {
                         textArea.value += 'Error: ' + error + '\n';
@@ -41,32 +40,32 @@
                 // Don't use device before ipcon is connected
 
                 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
-                    function(connectReason) {
+                    function (connectReason) {
                         // Select NFC Forum Type 2 tag
-                        nfc.requestTagID(Tinkerforge.BrickletNFCRFID.TAG_TYPE_TYPE2);
+                        nr.requestTagID(Tinkerforge.BrickletNFCRFID.TAG_TYPE_TYPE2);
                     }
                 );
 
                 // Register state changed callback
-                nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
-                    // Callback function for state change callback
-                    function(state, idle) {
+                nr.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
+                    // Callback function for state changed callback
+                    function (state, idle) {
                         if(state == Tinkerforge.BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
-                            textArea.value += "Tag found\n";
+                            textArea.value += 'Tag found\n';
 
                             // Write 16 byte to pages 5-8
                             var dataWrite = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
-                            nfc.writePage(5, dataWrite);
-                            textArea.value += "Writing data...\n";
+                            nr.writePage(5, dataWrite);
+                            textArea.value += 'Writing data...\n';
                         } else if(state == Tinkerforge.BrickletNFCRFID.STATE_WRITE_PAGE_READY) {
                             // Request pages 5-8
-                            nfc.requestPage(5);
-                            textArea.value += "Requesting data...\n";
+                            nr.requestPage(5);
+                            textArea.value += 'Requesting data...\n';
                         } else if(state == Tinkerforge.BrickletNFCRFID.STATE_REQUEST_PAGE_READY) {
                             // Get and print pages
-                            nfc.getPage(
-                                function(data) {
+                            nr.getPage(
+                                function (data) {
                                     var s = 'Read data: [' + data[0];
 
                                     for(var i = 1; i < data.length; i++) {
@@ -79,16 +78,8 @@
                             );
                         } else if((state & (1 << 6)) == (1 << 6)) {
                             // All errors have bit 6 set
-                            textArea.value += "Error: " + state + '\n';
+                            textArea.value += 'Error: ' + state + '\n';
                         }
-                    }
-                );
-
-                textArea.value += "Press any key to exit ...";
-                process.stdin.on('data',
-                    function(data) {
-                        ipcon.disconnect();
-                        process.exit(0);
                     }
                 );
             }

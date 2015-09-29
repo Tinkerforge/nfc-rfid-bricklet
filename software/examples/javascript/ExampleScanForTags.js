@@ -2,37 +2,38 @@ var Tinkerforge = require('tinkerforge');
 
 var HOST = 'localhost';
 var PORT = 4223;
-var UID = 'hjw'; // Change to your UID
+var UID = 'XYZ'; // Change to your UID
 
 var ipcon = new Tinkerforge.IPConnection(); // Create IP connection
-var nfc = new Tinkerforge.BrickletNFCRFID(UID, ipcon); // Create device object
+var nr = new Tinkerforge.BrickletNFCRFID(UID, ipcon); // Create device object
 var tagType = 0;
 
 ipcon.connect(HOST, PORT,
-    function(error) {
-        console.log('Error: '+error);
+    function (error) {
+        console.log('Error: ' + error);
     }
 ); // Connect to brickd
 // Don't use device before ipcon is connected
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
-    function(connectReason) {
-        nfc.requestTagID(Tinkerforge.BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
+    function (connectReason) {
+        // Start scan loop
+        nr.requestTagID(Tinkerforge.BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
     }
 );
 
 // Register state changed callback
-nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
-    // Callback function for state change callback
-    function(state, idle) {
+nr.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
+    // Callback function for state changed callback
+    function (state, idle) {
         if(idle) {
             tagType = (tagType + 1) % 3;
-            nfc.requestTagID(tagType);
+            nr.requestTagID(tagType);
         }
 
         if(state == Tinkerforge.BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
-            nfc.getTagID(
-                function(tagType, tidLength, tid) {
+            nr.getTagID(
+                function (tagType, tidLength, tid) {
                     var s = 'Found tag of type ' + tagType +
                             ' with ID [' + tid[0].toString(16);
 
@@ -43,7 +44,7 @@ nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
                     s += ']';
                     console.log(s);
                 },
-                function(error) {
+                function (error) {
                     console.log('Error: ' + error);
                 }
             )
@@ -51,9 +52,9 @@ nfc.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
     }
 );
 
-console.log("Press any key to exit ...");
+console.log('Press key to exit');
 process.stdin.on('data',
-    function(data) {
+    function (data) {
         ipcon.disconnect();
         process.exit(0);
     }

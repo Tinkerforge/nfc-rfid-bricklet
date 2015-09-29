@@ -1,3 +1,4 @@
+using System;
 using Tinkerforge;
 
 class Example
@@ -11,19 +12,19 @@ class Example
 	{
 		if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY)
 		{
-			System.Console.WriteLine("Tag found");
+			Console.WriteLine("Tag found");
 
 			// Write 16 byte to pages 5-8
 			byte[] dataWrite = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
 			sender.WritePage(5, dataWrite);
-			System.Console.WriteLine("Writing data...");
+			Console.WriteLine("Writing data...");
 		}
 		else if(state == BrickletNFCRFID.STATE_WRITE_PAGE_READY)
 		{
 			// Request pages 5-8
 			sender.RequestPage(5);
-			System.Console.WriteLine("Requesting data...");
+			Console.WriteLine("Requesting data...");
 		}
 		else if(state == BrickletNFCRFID.STATE_REQUEST_PAGE_READY)
 		{
@@ -36,12 +37,12 @@ class Example
 				str += " " + data[i];
 			}
 
-			System.Console.Write("Read data: [" + str + "]");
+			Console.Write("Read data: [" + str + "]");
 		}
 		else if((state & (1 << 6)) == (1 << 6))
 		{
 			// All errors have bit 6 set
-			System.Console.WriteLine("Error: " + state);
+			Console.WriteLine("Error: " + state);
 		}
 	}
 
@@ -59,8 +60,8 @@ class Example
 		// Select NFC Forum Type 2 tag
 		nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
 
-		System.Console.WriteLine("Press enter to exit");
-		System.Console.ReadLine();
+		Console.WriteLine("Press enter to exit");
+		Console.ReadLine();
 		ipcon.Disconnect();
 	}
 }

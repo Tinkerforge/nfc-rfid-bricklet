@@ -24,7 +24,7 @@ const
 var
   e: TExample;
 
-{ Callback function for state changed callback }
+{ Callback procedure for state changed callback }
 procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
   const dataWrite: {$ifdef FPC}array [0..15] of byte{$else}TArray0To15OfUInt8{$endif} =
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
@@ -72,7 +72,7 @@ begin
 
   { Register state changed callback to procedure StateChangedCB }
   nr.OnStateChanged := {$ifdef FPC}@{$endif}StateChangedCB;
-  
+
   { Select NFC Forum Type 2 tag }
   nr.RequestTagID(BRICKLET_NFC_RFID_TAG_TYPE_TYPE2);
 

@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[     10588,        239]
-NotebookOptionsPosition[     10154,        218]
-NotebookOutlinePosition[     10492,        233]
-CellTagsIndexPosition[     10449,        230]
+NotebookDataLength[     10489,        242]
+NotebookOptionsPosition[     10055,        221]
+NotebookOutlinePosition[     10393,        236]
+CellTagsIndexPosition[     10350,        233]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -28,32 +28,31 @@ Cell[BoxData[{
    3.6163170259754677`*^9}, {3.616318124746986*^9, 3.616318129000987*^9}}],
 
 Cell[BoxData[{
- RowBox[{"host", "=", "\"\<localhost\>\""}], "\[IndentingNewLine]", 
- RowBox[{"port", "=", "4223"}], "\[IndentingNewLine]", 
+ RowBox[{"host", "=", "\"\<localhost\>\""}], "\n", 
+ RowBox[{"port", "=", "4223"}], "\n", 
  RowBox[{
-  RowBox[{"uid", "=", "\"\<abc\>\""}], 
-  RowBox[{"(*", " ", 
-   RowBox[{"Change", " ", "to", " ", "your", " ", "UID"}], " ", "*)"}], 
-  "\[IndentingNewLine]", "\[IndentingNewLine]", 
-  RowBox[{"(*", " ", 
+  RowBox[{"uid", "=", "\"\<XYZ\>\""}], 
+  RowBox[{"(*", 
+   RowBox[{"Change", " ", "to", " ", "your", " ", "UID"}], "*)"}], "\n", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
    RowBox[{
    "Create", " ", "IPConnection", " ", "and", " ", "device", " ", "object"}], 
-   " ", "*)"}]}], "\[IndentingNewLine]", 
+   "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{"ipcon", "=", 
   RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}], "\n", 
- RowBox[{"nfc", "=", 
+ RowBox[{"nr", "=", 
   RowBox[{"NETNew", "[", 
    RowBox[{"\"\<Tinkerforge.BrickletNFCRFID\>\"", ",", "uid", ",", "ipcon"}], 
-   "]"}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\n", 
  RowBox[{
   RowBox[{"ipcon", "@", 
    RowBox[{"Connect", "[", 
-    RowBox[{"host", ",", "port"}], "]"}]}], "\[IndentingNewLine]", 
-  "\[IndentingNewLine]", 
-  RowBox[{"(*", " ", 
+    RowBox[{"host", ",", "port"}], "]"}]}], "\n", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
    RowBox[{
    "Callback", " ", "function", " ", "for", " ", "state", " ", "changed", " ",
-     "callback"}], " ", "*)"}]}], "\[IndentingNewLine]", 
+     "callback"}], "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"StateChangedCB", "[", 
@@ -71,12 +70,12 @@ Cell[BoxData[{
         "\[IndentingNewLine]", 
         RowBox[{
          RowBox[{"Print", "[", "\"\<Tag found\>\"", "]"}], ";", 
-         "\[IndentingNewLine]", "\[IndentingNewLine]", 
-         RowBox[{"(*", " ", 
+         "\[IndentingNewLine]", 
+         RowBox[{"(*", 
           RowBox[{
            RowBox[{
            "Write", " ", "16", " ", "byte", " ", "to", " ", "pages", " ", 
-            "5"}], "-", "8"}], " ", "*)"}], "\[IndentingNewLine]", 
+            "5"}], "-", "8"}], "*)"}], 
          RowBox[{"dataWrite", "=", 
           RowBox[{"{", 
            RowBox[{
@@ -96,10 +95,10 @@ Cell[BoxData[{
         "state", "\[Equal]", 
          "Tinkerforge`BrickletNFCRFID`STATEUWRITEUPAGEUREADY"}], ",", 
         "\[IndentingNewLine]", 
-        RowBox[{"(*", " ", 
+        RowBox[{"(*", 
          RowBox[{
-          RowBox[{"Request", " ", "pages", " ", "5"}], "-", "8"}], " ", 
-         "*)"}], "\[IndentingNewLine]", 
+          RowBox[{"Request", " ", "pages", " ", "5"}], "-", "8"}], "*)"}], 
+        "\[IndentingNewLine]", 
         RowBox[{
          RowBox[{"sender", "@", 
           RowBox[{"RequestPage", "[", "5", "]"}]}], ";", 
@@ -112,10 +111,10 @@ Cell[BoxData[{
         "state", "\[Equal]", 
          "Tinkerforge`BrickletNFCRFID`STATEUREQUESTUPAGEUREADY"}], ",", 
         "\[IndentingNewLine]", 
-        RowBox[{"(*", " ", 
+        RowBox[{"(*", 
          RowBox[{
           RowBox[{"Get", " ", "and", " ", "print", " ", "pages", " ", "5"}], 
-          "-", "8"}], " ", "*)"}], "\[IndentingNewLine]", 
+          "-", "8"}], "*)"}], "\[IndentingNewLine]", 
         RowBox[{
          RowBox[{"dataRead", "=", 
           RowBox[{"sender", "@", 
@@ -130,14 +129,14 @@ Cell[BoxData[{
           RowBox[{
            RowBox[{"i", "=", "2"}], ",", 
            RowBox[{"i", "\[LessEqual]", "16"}], ",", 
-           RowBox[{"++", "i"}], ",", 
+           RowBox[{"++", "i"}], ",", "\[IndentingNewLine]", 
            RowBox[{"AppendTo", "[", 
             RowBox[{"result", ",", 
              RowBox[{"\"\< \>\"", "<>", 
               RowBox[{"ToString", "[", 
                RowBox[{"dataRead", "[", 
-                RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], "]"}]}], "]"}], 
-         ";", "\[IndentingNewLine]", 
+                RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], "]"}]}], 
+          "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
          RowBox[{"Print", "[", 
           RowBox[{"\"\<Read data: [\>\"", "<>", 
            RowBox[{"StringJoin", "[", "result", "]"}], "<>", "\"\<]\>\""}], 
@@ -150,33 +149,36 @@ Cell[BoxData[{
            RowBox[{"state", ",", "2", ",", "8"}], "]"}], "[", 
           RowBox[{"[", "2", "]"}], "]"}], "\[Equal]", "1"}], ",", 
         "\[IndentingNewLine]", 
-        RowBox[{"(*", " ", 
+        RowBox[{"(*", 
          RowBox[{
          "All", " ", "errors", " ", "have", " ", "bit", " ", "6", " ", 
-          "set"}], " ", "*)"}], "\[IndentingNewLine]", 
+          "set"}], "*)"}], "\[IndentingNewLine]", 
         RowBox[{"Print", "[", 
          RowBox[{"\"\<Error: \>\"", "<>", 
           RowBox[{"ToString", "[", "state", "]"}]}], "]"}]}], 
        "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\n", 
  RowBox[{
   RowBox[{"AddEventHandler", "[", 
    RowBox[{
-    RowBox[{"nfc", "@", "StateChanged"}], ",", "StateChangedCB"}], "]"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"nfc", "@", 
+    RowBox[{"nr", "@", "StateChanged"}], ",", "StateChangedCB"}], "]"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", 
    RowBox[{
-   "RequestTagID", "[", "Tinkerforge`BrickletNFCRFID`TAGUTYPEUTYPE2", "]"}]}],
-   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+   "Select", " ", "NFC", " ", "Forum", " ", "Type", " ", "2", " ", "tag"}], 
+   "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{"nr", "@", 
+   RowBox[{"RequestTagID", "[", "BrickletNFCRFID`TAGUTYPEUTYPE2", "]"}]}], 
+  "\[IndentingNewLine]"}], "\n", 
  RowBox[{
   RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}], 
   "\[IndentingNewLine]", "\[IndentingNewLine]", 
-  RowBox[{"(*", " ", 
-   RowBox[{"Clean", " ", "up"}], " ", "*)"}]}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Clean", " ", "up"}], "*)"}]}], "\n", 
  RowBox[{"ipcon", "@", 
-  RowBox[{"Disconnect", "[", "]"}]}], "\[IndentingNewLine]", 
- RowBox[{"ReleaseNETObject", "[", "nfc", "]"}], "\[IndentingNewLine]", 
+  RowBox[{"Disconnect", "[", "]"}]}], "\n", 
+ RowBox[{"ReleaseNETObject", "[", "nr", "]"}], "\n", 
  RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]}], "Input",
  CellChangeTimes->{{3.600075175574196*^9, 3.600075177574486*^9}, {
    3.600075518821967*^9, 3.60007554243471*^9}, {3.600075580562348*^9, 
@@ -214,10 +216,11 @@ Cell[BoxData[{
    3.616317573015606*^9, 3.616317604322405*^9}, {3.616317719502481*^9, 
    3.616317772190762*^9}, {3.6163178306115837`*^9, 3.616317870481496*^9}, 
    3.616317967156001*^9, {3.6163180454813747`*^9, 3.616318051266551*^9}, {
-   3.616318120182467*^9, 3.6163181365625772`*^9}, 3.6163215058259583`*^9}]
+   3.616318120182467*^9, 3.6163181365625772`*^9}, 3.6163215058259583`*^9, {
+   3.652514125004901*^9, 3.652514164099769*^9}}]
 },
 WindowSize->{1521, 867},
-WindowMargins->{{Automatic, 89}, {68, Automatic}},
+WindowMargins->{{Automatic, 88}, {67, Automatic}},
 FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
 StyleDefinitions->"Default.nb"
 ]
@@ -233,7 +236,7 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[400, 13, 848, 14, 55, "Input"],
-Cell[1251, 29, 8899, 187, 1067, "Input"]
+Cell[1251, 29, 8800, 190, 1089, "Input"]
 }
 ]
 *)

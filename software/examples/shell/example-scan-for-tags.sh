@@ -1,16 +1,17 @@
 #!/bin/sh
-# connects to localhost:4223 by default, use --host and --port to change it
+# Connects to localhost:4223 by default, use --host and --port to change this
 
-# change to your UID
-uid=hjw
+uid=XYZ # Change to your UID
+tmp=$(mktemp)
 
-echo "0" > /tmp/tf_sft_tt
+echo $tmp
+echo "0" > $tmp
 
-# handle incoming state changed callbacks
+# Handle incoming state changed callbacks
 tinkerforge dispatch nfc-rfid-bricklet $uid state-changed\
  --execute "if [ {idle} ]
             then 
-              tt=\`cat /tmp/tf_sft_tt\`
+              tt=\$(cat $tmp)
               if [ \$tt -eq 0 ] 
                 then tt=1
               elif [ \$tt -eq 1 ] 
@@ -18,11 +19,16 @@ tinkerforge dispatch nfc-rfid-bricklet $uid state-changed\
               elif [ \$tt -eq 2 ] 
                 then tt=0
               fi
-              echo \"\$tt\" > /tmp/tf_sft_tt
+              echo \"\$tt\" > $tmp
               tinkerforge call nfc-rfid-bricklet $uid request-tag-id \$tt
             fi;
-            if [ {state} -eq 130 ]
+            if [ {state} == request-tag-id-ready ]
               then tinkerforge call nfc-rfid-bricklet $uid get-tag-id
             fi" &
 
-tinkerforge call nfc-rfid-bricklet $uid request-tag-id 0
+# Start scan loop
+tinkerforge call nfc-rfid-bricklet $uid request-tag-id mifare-classic
+
+echo "Press key to exit"; read dummy
+
+kill -- -$$ # Stop callback dispatch in background

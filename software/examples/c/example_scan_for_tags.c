@@ -9,7 +9,7 @@
 
 uint8_t current_tag_type = NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
 
-// Callback function for state changed callback 
+// Callback function for state changed callback
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 	NFCRFID *nr = (NFCRFID *)user_data;
 
@@ -59,6 +59,7 @@ int main(void) {
 	                           (void *)cb_state_changed,
 	                           &nr);
 
+	// Start scan loop
 	nfc_rfid_request_tag_id(&nr, NFC_RFID_TAG_TYPE_MIFARE_CLASSIC);
 
 	printf("Press key to exit\n");

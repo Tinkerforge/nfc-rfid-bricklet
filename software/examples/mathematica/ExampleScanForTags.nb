@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[      8316,        191]
-NotebookOptionsPosition[      7883,        170]
-NotebookOutlinePosition[      8221,        185]
-CellTagsIndexPosition[      8178,        182]
+NotebookDataLength[      8288,        195]
+NotebookOptionsPosition[      7855,        174]
+NotebookOutlinePosition[      8193,        189]
+CellTagsIndexPosition[      8150,        186]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -27,37 +27,36 @@ Cell[BoxData[{
    3.616316700378488*^9, 3.616316703524254*^9}}],
 
 Cell[BoxData[{
- RowBox[{"host", "=", "\"\<localhost\>\""}], "\[IndentingNewLine]", 
- RowBox[{"port", "=", "4223"}], "\[IndentingNewLine]", 
+ RowBox[{"host", "=", "\"\<localhost\>\""}], "\n", 
+ RowBox[{"port", "=", "4223"}], "\n", 
  RowBox[{
-  RowBox[{"uid", "=", "\"\<abc\>\""}], 
-  RowBox[{"(*", " ", 
-   RowBox[{"Change", " ", "to", " ", "your", " ", "UID"}], " ", "*)"}], 
-  "\[IndentingNewLine]", "\[IndentingNewLine]", 
-  RowBox[{"(*", " ", 
+  RowBox[{"uid", "=", "\"\<XYZ\>\""}], 
+  RowBox[{"(*", 
+   RowBox[{"Change", " ", "to", " ", "your", " ", "UID"}], "*)"}], "\n", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
    RowBox[{
    "Create", " ", "IPConnection", " ", "and", " ", "device", " ", "object"}], 
-   " ", "*)"}]}], "\[IndentingNewLine]", 
+   "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{"ipcon", "=", 
   RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}], "\n", 
- RowBox[{"nfc", "=", 
+ RowBox[{"nr", "=", 
   RowBox[{"NETNew", "[", 
    RowBox[{"\"\<Tinkerforge.BrickletNFCRFID\>\"", ",", "uid", ",", "ipcon"}], 
-   "]"}]}], "\[IndentingNewLine]", 
+   "]"}]}], "\n", 
  RowBox[{
   RowBox[{"ipcon", "@", 
    RowBox[{"Connect", "[", 
-    RowBox[{"host", ",", "port"}], "]"}]}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+    RowBox[{"host", ",", "port"}], "]"}]}], "\[IndentingNewLine]"}], "\n", 
  RowBox[{
   RowBox[{
   "currentTageType", "=", 
    "Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC"}], "\n", 
   "\[IndentingNewLine]", 
-  RowBox[{"(*", " ", 
+  RowBox[{"(*", 
    RowBox[{
    "Callback", " ", "function", " ", "for", " ", "state", " ", "changed", " ",
-     "callback"}], " ", "*)"}]}], "\n", 
+     "callback"}], "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{"StateChangedCB", "[", 
@@ -102,7 +101,7 @@ Cell[BoxData[{
          RowBox[{"For", "[", 
           RowBox[{
            RowBox[{"i", "=", "2"}], ",", 
-           RowBox[{"i", "<=", "tidLength"}], ",", 
+           RowBox[{"i", "\[LessEqual]", "tidLength"}], ",", 
            RowBox[{"++", "i"}], ",", "\[IndentingNewLine]", 
            RowBox[{"AppendTo", "[", 
             RowBox[{"result", ",", 
@@ -117,24 +116,28 @@ Cell[BoxData[{
            "\"\< with ID [\>\"", "<>", 
            RowBox[{"StringJoin", "[", "result", "]"}], "<>", "\"\<]\>\""}], 
           "]"}]}]}], "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
-    "]"}]}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+    "]"}]}], "\n"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"AddEventHandler", "[", 
    RowBox[{
-    RowBox[{"nfc", "@", "StateChanged"}], ",", "StateChangedCB"}], "]"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+    RowBox[{"nr", "@", "StateChanged"}], ",", "StateChangedCB"}], "]"}], "\n",
+   "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Start", " ", "scan", " ", "loop"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"nfc", "@", 
-   RowBox[{"RequestTagID", "[", "currentTageType", "]"}]}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+  RowBox[{"nr", "@", 
+   RowBox[{
+   "RequestTagID", "[", "BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC", "]"}]}], 
+  "\n"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}], 
-  "\[IndentingNewLine]", "\[IndentingNewLine]", 
-  RowBox[{"(*", " ", 
-   RowBox[{"Clean", " ", "up"}], " ", "*)"}]}], "\[IndentingNewLine]", 
+  RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}], "\n", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"Clean", " ", "up"}], "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{"ipcon", "@", 
-  RowBox[{"Disconnect", "[", "]"}]}], "\[IndentingNewLine]", 
- RowBox[{"ReleaseNETObject", "[", "nfc", "]"}], "\[IndentingNewLine]", 
+  RowBox[{"Disconnect", "[", "]"}]}], "\n", 
+ RowBox[{"ReleaseNETObject", "[", "nr", "]"}], "\n", 
  RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]}], "Input",
  CellChangeTimes->{{3.600075175574196*^9, 3.600075177574486*^9}, {
    3.600075518821967*^9, 3.60007554243471*^9}, {3.600075580562348*^9, 
@@ -166,10 +169,11 @@ Cell[BoxData[{
    3.616315607591494*^9, 3.616315670937028*^9}, {3.616315927444541*^9, 
    3.6163159453973417`*^9}, {3.61631618599885*^9, 3.61631631550334*^9}, {
    3.616316380271517*^9, 3.616316387142614*^9}, {3.616316469468479*^9, 
-   3.616316492685285*^9}, {3.616316664264317*^9, 3.616316707923465*^9}}]
+   3.616316492685285*^9}, {3.616316664264317*^9, 3.616316707923465*^9}, {
+   3.652514207130981*^9, 3.652514244265709*^9}}]
 },
 WindowSize->{1521, 867},
-WindowMargins->{{Automatic, 90}, {69, Automatic}},
+WindowMargins->{{Automatic, 89}, {68, Automatic}},
 FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
 StyleDefinitions->"Default.nb"
 ]
@@ -185,7 +189,7 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[400, 13, 750, 13, 55, "Input"],
-Cell[1153, 28, 6726, 140, 869, "Input"]
+Cell[1153, 28, 6698, 144, 891, "Input"]
 }
 ]
 *)

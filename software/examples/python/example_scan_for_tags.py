@@ -20,11 +20,8 @@ def cb_state_changed(state, idle, nr):
 
     if state == nr.STATE_REQUEST_TAG_ID_READY:
         ret = nr.get_tag_id()
-        print('Found tag of type ' +
-              str(ret.tag_type) +
-              ' with ID [' +
-              ' '.join(map(str, map(hex, ret.tid[:ret.tid_length]))) +
-              "]")
+        print("Found tag of type " + str(ret.tag_type) + " with ID [" +
+              " ".join(map(str, map(hex, ret.tid[:ret.tid_length]))) + "]")
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection
@@ -37,7 +34,8 @@ if __name__ == "__main__":
     nr.register_callback(nr.CALLBACK_STATE_CHANGED,
                          lambda x, y: cb_state_changed(x, y, nr))
 
+    # Start scan loop
     nr.request_tag_id(nr.TAG_TYPE_MIFARE_CLASSIC)
 
-    raw_input('Press key to exit\n') # Use input() in Python 3
+    raw_input("Press key to exit\n") # Use input() in Python 3
     ipcon.disconnect()

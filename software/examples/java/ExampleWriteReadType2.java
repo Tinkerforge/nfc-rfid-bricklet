@@ -6,16 +6,17 @@ public class ExampleWriteReadType2 {
 	private static final int PORT = 4223;
 	private static final String UID = "XYZ"; // Change to your UID
 
-	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
-	//       might normally want to catch are described in the documentation
+	// Note: To make the example code cleaner we do not handle exceptions. Exceptions
+	//       you might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
+		// Note: Declare nr as final, so the listener can access it
 		final BrickletNFCRFID nr = new BrickletNFCRFID(UID, ipcon); // Create device object
 
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Add and implement state changed listener (called if state changes)
+		// Add state changed listener
 		nr.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
 			public void stateChanged(short state, boolean idle) {
 				try {

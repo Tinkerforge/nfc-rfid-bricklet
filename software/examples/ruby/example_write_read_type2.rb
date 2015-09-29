@@ -40,7 +40,7 @@ nr.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
 end
 
 # Select NFC Forum Type 2 tag
-nr.request_tag_id(BrickletNFCRFID::TAG_TYPE_TYPE2)
+nr.request_tag_id BrickletNFCRFID::TAG_TYPE_TYPE2
 
 puts 'Press key to exit'
 $stdin.gets

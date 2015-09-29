@@ -1,42 +1,44 @@
 function matlab_example_scan_for_tags()
-    global nfc;
+    global nr;
     global tag_type;
+
     import com.tinkerforge.IPConnection;
     import com.tinkerforge.BrickletNFCRFID;
 
     HOST = 'localhost';
     PORT = 4223;
-    UID = 'hjw'; % Change to your UID
-    
+    UID = 'XYZ'; % Change to your UID
+
     ipcon = IPConnection(); % Create IP connection
-    nfc = BrickletNFCRFID(UID, ipcon); % Create device object
+    nr = BrickletNFCRFID(UID, ipcon); % Create device object
     tag_type = 0;
 
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
 
     % Register state changed callback to function cb_state_changed
-    set(nfc, 'StateChangedCallback', @(h, e) cb_state_changed(e));
-    
-    nfc.requestTagID(nfc.TAG_TYPE_MIFARE_CLASSIC);
+    set(nr, 'StateChangedCallback', @(h, e) cb_state_changed(e));
 
-    input('Press any key to exit...\n', 's');
+    % Start scan loop
+    nr.requestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);
+
+    input('Press key to exit\n', 's');
     ipcon.disconnect();
 end
 
-% Callback function for state changed
+% Callback function for state changed callback
 function cb_state_changed(e)
-    global tag_type
-    global nfc
+    global nr;
+    global tag_type;
     
     % Cycle through all types
     if e.idle
         tag_type = mod((tag_type + 1), 3);
-        nfc.requestTagID(tag_type);
+        nr.requestTagID(tag_type);
     end
     
-    if e.state == nfc.STATE_REQUEST_TAG_ID_READY
-        ret = nfc.getTagID();
+    if e.state == nr.STATE_REQUEST_TAG_ID_READY
+        ret = nr.getTagID();
 
         if ret.tidLength == 4
             fprintf('Found tag of type %d with ID [%x %x %x %x]\n', ...
