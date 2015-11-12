@@ -4,7 +4,7 @@
 uid=XYZ # Change to your UID
 tmp=$(mktemp)
 
-echo $tmp
+# Create temporary file to keep track of current tag type
 echo "0" > $tmp
 
 # Handle incoming state changed callbacks
