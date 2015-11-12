@@ -10,7 +10,7 @@ function matlab_example_scan_for_tags()
     UID = 'XYZ'; % Change to your UID
 
     ipcon = IPConnection(); % Create IP connection
-    nr = BrickletNFCRFID(UID, ipcon); % Create device object
+    nr = handle(BrickletNFCRFID(UID, ipcon), 'CallbackProperties'); % Create device object
     tag_type = 0;
 
     ipcon.connect(HOST, PORT); % Connect to brickd
