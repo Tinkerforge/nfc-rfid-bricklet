@@ -7,7 +7,8 @@ Module ExampleWriteReadType2
     Const UID As String = "XYZ" ' Change to your UID
 
     ' Callback subroutine for state changed callback
-    Sub StateChangedCB(ByVal sender As BrickletNFCRFID, ByVal state As Byte, ByVal idle As Boolean)
+    Sub StateChangedCB(ByVal sender As BrickletNFCRFID, _
+                       ByVal state As Byte, ByVal idle As Boolean)
         If state = BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY Then
             System.Console.WriteLine("Tag found")
 
