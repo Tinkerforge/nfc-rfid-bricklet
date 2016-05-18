@@ -64,6 +64,7 @@ int main(void) {
 
 	printf("Press key to exit\n");
 	getchar();
+	nfc_rfid_destroy(&nr);
 	ipcon_destroy(&ipcon); // Calls ipcon_disconnect internally
 	return 0;
 }
