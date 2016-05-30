@@ -25,7 +25,7 @@ function cb_stateChanged($state, $idle, $user_data)
 
 	if($state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY) {
 		$ret = $nr->getTagID();
-		echo "Found tag of type " . $ret["tag_type"] . " with ID [" . $ret["tid"][0];
+		echo "Found tag of type " . $ret["tag_type"] . " with ID [" . dechex($ret["tid"][0]);
 
 		for($i = 1; $i < $ret["tid_length"]; $i++) {
 			echo " " . dechex($ret["tid"][$i]);
