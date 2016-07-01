@@ -3,7 +3,7 @@ LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
 
 host="localhost"
 port=4223
-uid="XYZ"(*Change to your UID*)
+uid="XYZ"(*Change XYZ to the UID of your NFC/RFID Bricklet*)
 
 (*Create IPConnection and device object*)
 ipcon=NETNew["Tinkerforge.IPConnection"]

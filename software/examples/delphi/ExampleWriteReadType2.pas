@@ -12,20 +12,22 @@ type
     ipcon: TIPConnection;
     nr: TBrickletNFCRFID;
   public
-    procedure StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
+    procedure StateChangedCB(sender: TBrickletNFCRFID; const state: byte;
+                             const idle: boolean);
     procedure Execute;
   end;
 
 const
   HOST = 'localhost';
   PORT = 4223;
-  UID = 'XYZ'; { Change to your UID }
+  UID = 'XYZ'; { Change XYZ to the UID of your NFC/RFID Bricklet }
 
 var
   e: TExample;
 
 { Callback procedure for state changed callback }
-procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
+procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte;
+                                  const idle: boolean);
   const dataWrite: {$ifdef FPC}array [0..15] of byte{$else}TArray0To15OfUInt8{$endif} =
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
   var s: String;

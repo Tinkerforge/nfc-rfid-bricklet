@@ -5,7 +5,7 @@
 
 #define HOST "localhost"
 #define PORT 4223
-#define UID "XYZ" // Change to your UID
+#define UID "XYZ" // Change XYZ to the UID of your NFC/RFID Bricklet
 
 // Callback function for state changed callback
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {

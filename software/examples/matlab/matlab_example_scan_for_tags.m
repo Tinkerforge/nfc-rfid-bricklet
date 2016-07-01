@@ -7,7 +7,7 @@ function matlab_example_scan_for_tags()
 
     HOST = 'localhost';
     PORT = 4223;
-    UID = 'XYZ'; % Change to your UID
+    UID = 'XYZ'; % Change XYZ to the UID of your NFC/RFID Bricklet
 
     ipcon = IPConnection(); % Create IP connection
     nr = handle(BrickletNFCRFID(UID, ipcon), 'CallbackProperties'); % Create device object

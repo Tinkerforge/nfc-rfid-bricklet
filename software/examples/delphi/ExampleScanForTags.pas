@@ -13,20 +13,22 @@ type
     nr: TBrickletNFCRFID;
     currentTagType: byte;
   public
-    procedure StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
+    procedure StateChangedCB(sender: TBrickletNFCRFID; const state: byte;
+                             const idle: boolean);
     procedure Execute;
   end;
 
 const
   HOST = 'localhost';
   PORT = 4223;
-  UID = 'XYZ'; { Change to your UID }
+  UID = 'XYZ'; { Change XYZ to the UID of your NFC/RFID Bricklet }
 
 var
   e: TExample;
 
 { Callback procedure for state changed callback }
-procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte; const idle: boolean);
+procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte;
+                                  const idle: boolean);
   var tagType: byte;
   var tidLength: byte;
   var tid: {$ifdef FPC}array [0..6] of byte{$else}TArray0To6OfUInt8{$endif};

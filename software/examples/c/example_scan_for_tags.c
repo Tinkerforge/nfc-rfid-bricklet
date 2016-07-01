@@ -5,7 +5,7 @@
 
 #define HOST "localhost"
 #define PORT 4223
-#define UID "XYZ" // Change to your UID
+#define UID "XYZ" // Change XYZ to the UID of your NFC/RFID Bricklet
 
 uint8_t current_tag_type = NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
 

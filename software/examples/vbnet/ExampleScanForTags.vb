@@ -4,13 +4,13 @@ Imports Tinkerforge
 Module ExampleScanForTags
     Const HOST As String = "localhost"
     Const PORT As Integer = 4223
-    Const UID As String = "XYZ" ' Change to your UID
+    Const UID As String = "XYZ" ' Change XYZ to the UID of your NFC/RFID Bricklet
 
     Private currentTagType As Byte = 0
 
     ' Callback subroutine for state changed callback
-    Sub StateChangedCB(ByVal sender As BrickletNFCRFID, _
-                       ByVal state As Byte, ByVal idle As Boolean)
+    Sub StateChangedCB(ByVal sender As BrickletNFCRFID, ByVal state As Byte, _
+                       ByVal idle As Boolean)
         If idle Then
             currentTagType = Convert.ToByte((currentTagType + 1) Mod 3)
             sender.requestTagID(currentTagType)
@@ -31,7 +31,6 @@ Module ExampleScanForTags
                                   tagType, tid(0), tid(1), tid(2), tid(3))
             End If
         End If
-
     End Sub
 
     Sub Main()
