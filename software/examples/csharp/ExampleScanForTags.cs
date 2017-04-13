@@ -49,7 +49,7 @@ class Example
 		// Don't use device before ipcon is connected
 
 		// Register state changed callback to function StateChangedCB
-		nr.StateChanged += StateChangedCB;
+		nr.StateChangedCallback += StateChangedCB;
 
 		// Start scan loop
 		nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC);

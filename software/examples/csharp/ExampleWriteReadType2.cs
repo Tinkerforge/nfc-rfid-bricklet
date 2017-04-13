@@ -55,7 +55,7 @@ class Example
 		// Don't use device before ipcon is connected
 
 		// Register state changed callback to function StateChangedCB
-		nr.StateChanged += StateChangedCB;
+		nr.StateChangedCallback += StateChangedCB;
 
 		// Select NFC Forum Type 2 tag
 		nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_TYPE2);
