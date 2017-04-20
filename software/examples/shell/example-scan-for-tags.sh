@@ -27,7 +27,7 @@ tinkerforge dispatch nfc-rfid-bricklet $uid state-changed\
             fi" &
 
 # Start scan loop
-tinkerforge call nfc-rfid-bricklet $uid request-tag-id mifare-classic
+tinkerforge call nfc-rfid-bricklet $uid request-tag-id tag-type-mifare-classic
 
 echo "Press key to exit"; read dummy
 
