@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-  
+# -*- coding: utf-8 -*-
 
 # The following specifications have been used
 # as a basis for writing this example.
@@ -14,12 +14,12 @@
 # https://github.com/Tinkerforge/nfc-rfid-bricklet/raw/master/datasheets/specification_type2.pdf
 
 from tinkerforge.ip_connection import IPConnection
-from tinkerforge.bricklet_nfc_rfid import NFCRFID
+from tinkerforge.bricklet_nfc_rfid import BrickletNFCRFID
 
 try:
-    from Queue import Queue
-except ImportError:
     from queue import Queue
+except ImportError:
+    from Queue import Queue
 
 from pprint import pprint
 import os
@@ -47,7 +47,8 @@ class NdefMessage:
         # Magic number to indicate NFC Forum defined data is stored
         self.capability_container[0] = 0xE1
         self.capability_container[1] = version
-        if self.tag_type == NFCRFID.TAG_TYPE_TYPE1:
+
+        if self.tag_type == BrickletNFCRFID.TAG_TYPE_TYPE1:
             self.capability_container[2] = tag_size/8 - 1
         else:
             self.capability_container[2] = tag_size/8
@@ -56,17 +57,19 @@ class NdefMessage:
 
     def get_raw_data_in_chunks(self):
         raw_data = []
+
         for record in self.records:
             raw_data.extend(record.get_raw_data())
 
-        # Use Three consecutive byte format if necessary, see 2.3 TLV blocks
+        # Use three consecutive byte format if necessary, see 2.3 TLV blocks
         data_len = len(raw_data)
+
         if data_len < 0xFF:
             tlv_ndef = [0x03, data_len]
         else:
             tlv_ndef = [0x03, 0xFF, data_len >> 8, data_len % 256]
 
-        if self.tag_type == NFCRFID.TAG_TYPE_TYPE1:
+        if self.tag_type == BrickletNFCRFID.TAG_TYPE_TYPE1:
             # CC set by set_capability_container
             # default lock and memory TLVs
             # NDEF TLV
@@ -76,8 +79,8 @@ class NdefMessage:
                        [0x01, 0x03, 0xF2, 0x30, 0x33, 0x02, 0x03, 0xF0, 0x02, 0x03] + \
                        tlv_ndef + \
                        raw_data + \
-                       [0xFE] 
-        elif self.tag_type == NFCRFID.TAG_TYPE_TYPE2:
+                       [0xFE]
+        elif self.tag_type == BrickletNFCRFID.TAG_TYPE_TYPE2:
             # CC set by set_capability_container
             # NDEF TLV
             # NDEF message
@@ -87,16 +90,17 @@ class NdefMessage:
                        raw_data + \
                        [0xFE]
         else:
-            # TODO: We could support TAG_TYPE_MIFARE_CLASSIC here, but mifare classic
-            # it is not supported in modern smart phones anyway.
+            # TODO: We could support TAG_TYPE_MIFARE_CLASSIC here, but Mifare
+            # Classic it is not supported in modern smart phones anyway.
             return [[]]
 
-
         chunks = []
+
         for i in range(0, len(raw_data), 16):
             chunks.append(raw_data[i:i+16])
 
         last_chunk_length = len(chunks[-1])
+
         if last_chunk_length < 16:
             chunks[-1].extend([0]*(16-last_chunk_length))
 
@@ -176,12 +180,16 @@ class NdefRecord:
 
         # Construct tnf and flags (byte 0 of header)
         header = [self.tnf]
+
         if self.begin:
             header[0] |= NdefRecord.FLAG_MESSAGE_BEGIN
+
         if self.end:
             header[0] |= NdefRecord.FLAG_MESSAGE_END
+
         if len(self.payload) < 256:
             header[0] |= NdefRecord.FLAG_SHORT_RECORD
+
         if self.identifier != None:
             header[0] |= NdefRecord.FLAG_ID_LENGTH
 
@@ -225,16 +233,16 @@ class NdefUriRecord(NdefRecord):
 
         uri_list = map(ord, uri)
 
-        # Text Record Content: URI prefix, URI 
+        # Text Record Content: URI prefix, URI
         # See NDEF 1.0: 3.2.2
         self.payload = [uri_prefix] + uri_list
 
 class NdefMediaRecord(NdefRecord):
     def __init__(self, mime_type, data):
         self.tnf = NdefRecord.TNF_MIME_MEDIA
-
         self.record_type = map(ord, mime_type)
-        if type(data) == str:
+
+        if isinstance(data, str):
             self.payload = map(ord, data)
         else:
             self.payload = data
@@ -252,7 +260,7 @@ class ExampleNdef:
         self.tag_type = tag_type
         self.tag_size = tag_size
         self.ipcon = IPConnection() # Create IP connection
-        self.nfc = NFCRFID(self.UID, self.ipcon) # Create device object
+        self.nr = BrickletNFCRFID(self.UID, self.ipcon) # Create device object
 
         self.ipcon.connect(self.HOST, self.PORT) # Connect to brickd
 
@@ -265,16 +273,18 @@ class ExampleNdef:
 
         self.nr.request_tag_id(self.tag_type)
         state = self.state_queue.get()
+
         if state != self.nr.STATE_REQUEST_TAG_ID:
             return -1
 
         state = self.state_queue.get()
+
         if state != self.nr.STATE_REQUEST_TAG_ID_READY:
             return -2
-        
+
         # NFC Forum Type 1 start page is 1 (start of capability container)
         # NFC Forum Type 2 start page is 3 (start of capability container)
-        if self.tag_type == NFCRFID.TAG_TYPE_TYPE1:
+        if self.tag_type == self.nr.TAG_TYPE_TYPE1:
             current_page = 1
         else:
             current_page = 3
@@ -282,16 +292,18 @@ class ExampleNdef:
         for chunk in chunks:
             self.nr.write_page(current_page, chunk)
             state = self.state_queue.get()
+
             if state != self.nr.STATE_WRITE_PAGE:
                 return -3
 
             state = self.state_queue.get()
+
             if state != self.nr.STATE_WRITE_PAGE_READY:
                 return -4
 
             # NFC Forum Type 1 has 2 pages per chunk (16 byte)
             # NFC Forum Type 2 has 4 pages per chunk (16 byte)
-            if self.tag_type == NFCRFID.TAG_TYPE_TYPE1 :       
+            if self.tag_type == self.nr.TAG_TYPE_TYPE1:
                 current_page += 2
             else:
                 current_page += 4
@@ -304,8 +316,8 @@ class ExampleNdef:
     def make_message_small(self):
         self.message = NdefMessage(self.tag_type)
 
-        # Capabilities: 
-        # Version 1.0               (0x10) 
+        # Capabilities:
+        # Version 1.0               (0x10)
         # Tag size bytes            (given by self.tag_size)
         # Read/write access for all (0x00)
         self.message.set_capability_container(0x10, self.tag_size, 0x00)
@@ -316,8 +328,8 @@ class ExampleNdef:
     def make_message_large(self):
         self.message = NdefMessage(self.tag_type)
 
-        # Capabilities: 
-        # Version 1.0               (0x10) 
+        # Capabilities:
+        # Version 1.0               (0x10)
         # Tag size bytes            (given by self.tag_size)
         # Read/write access for all (0x00)
         self.message.set_capability_container(0x10, self.tag_size, 0x00)
@@ -335,15 +347,18 @@ class ExampleNdef:
         # To test an "image/png" you can can download the file from:
         # http://download.tinkerforge.com/_stuff/tf_16x16.png
         if os.path.isfile('tf_16x16.png'):
-            logo = file('tf_16x16.png').read()
+            with open('tf_16x16.png', 'rb') as f:
+                logo = f.read()
+
             rec5 = NdefMediaRecord('image/png', map(ord, logo))
             self.message.add_record(rec5)
 
 if __name__ == '__main__':
-    example = ExampleNdef(tag_type=NFCRFID.TAG_TYPE_TYPE2, tag_size=888)
-#    example.make_message_large() # Writes different texts, URI, html site and image
+    example = ExampleNdef(tag_type=BrickletNFCRFID.TAG_TYPE_TYPE2, tag_size=888)
+    #example.make_message_large() # Writes different texts, URI, html site and image
     example.make_message_small() # Writes simple URI record
     ret = example.write_message()
+
     if ret < 0:
         print('Could not write NDEF Message: ' + str(ret))
     else:
