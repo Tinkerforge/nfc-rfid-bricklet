@@ -8,8 +8,8 @@ function octave_example_scan_for_tags()
     PORT = 4223;
     UID = "XYZ"; % Change XYZ to the UID of your NFC/RFID Bricklet
 
-    ipcon = java_new("com.tinkerforge.IPConnection"); % Create IP connection
-    nr = java_new("com.tinkerforge.BrickletNFCRFID", UID, ipcon); % Create device object
+    ipcon = javaObject("com.tinkerforge.IPConnection"); % Create IP connection
+    nr = javaObject("com.tinkerforge.BrickletNFCRFID", UID, ipcon); % Create device object
     tag_type = 0;
 
     ipcon.connect(HOST, PORT); % Connect to brickd
