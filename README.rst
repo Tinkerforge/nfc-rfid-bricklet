@@ -1,8 +1,6 @@
 NFC/RFID Bricklet
 =================
 
-**This Bricklet is currently in development**
-
 This repository contains the firmware source code and the hardware design
 files. The documentation generator configs can be found at
 https://github.com/Tinkerforge/generators
