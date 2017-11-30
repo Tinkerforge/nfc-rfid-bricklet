@@ -39,7 +39,7 @@ StateChangedCB[sender_,state_,idle_]:=
   ]
  ]
 
-AddEventHandler[nr@StateChanged,StateChangedCB]
+AddEventHandler[nr@StateChangedCallback,StateChangedCB]
 
 (*Select NFC Forum Type 2 tag*)
 nr@RequestTagID[BrickletNFCRFID`TAGUTYPEUTYPE2]

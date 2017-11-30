@@ -41,7 +41,7 @@ Module ExampleScanForTags
         ' Don't use device before ipcon is connected
 
         ' Register state changed callback to subroutine StateChangedCB
-        AddHandler nr.StateChanged, AddressOf StateChangedCB
+        AddHandler nr.StateChangedCallback, AddressOf StateChangedCB
 
         ' Start scan loop
         nr.RequestTagID(BrickletNFCRFID.TAG_TYPE_MIFARE_CLASSIC)

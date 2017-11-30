@@ -30,7 +30,7 @@ StateChangedCB[sender_,state_,idle_]:=
   ]
  ]
 
-AddEventHandler[nr@StateChanged,StateChangedCB]
+AddEventHandler[nr@StateChangedCallback,StateChangedCB]
 
 (*Start scan loop*)
 nr@RequestTagID[BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC]
