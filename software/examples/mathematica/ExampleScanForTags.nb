@@ -1,196 +1,44 @@
-(*CacheID: 234*)
-(* Internal cache information:
-NotebookFileLineBreakTest
-NotebookFileLineBreakTest
-NotebookDataPosition[         0,          0]
-NotebookDataLength[      8288,        195]
-NotebookOptionsPosition[      7855,        174]
-NotebookOutlinePosition[      8193,        189]
-CellTagsIndexPosition[      8150,        186]
-WindowFrame->Normal*)
-
-(* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[{
- RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}], "\[IndentingNewLine]", 
- RowBox[{"LoadNETAssembly", "[", 
-  RowBox[{"\"\<Tinkerforge\>\"", ",", 
-   RowBox[{
-    RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<../../..\>\""}]}], 
-  "]"}]}], "Input",
- CellChangeTimes->{{3.600175052949191*^9, 3.600175066601799*^9}, 
-   3.600175102142559*^9, {3.6001753172765293`*^9, 3.600175317946432*^9}, {
-   3.600500538026902*^9, 3.600500561851948*^9}, {3.600506097634747*^9, 
-   3.600506099012146*^9}, 3.600506136278721*^9, {3.60060805238198*^9, 
-   3.600608117803465*^9}, {3.600608826318905*^9, 3.600608826675346*^9}, 
-   3.600685362498796*^9, {3.6163146933274612`*^9, 3.616314697044626*^9}, {
-   3.616316700378488*^9, 3.616316703524254*^9}}],
-
-Cell[BoxData[{
- RowBox[{"host", "=", "\"\<localhost\>\""}], "\n", 
- RowBox[{"port", "=", "4223"}], "\n", 
- RowBox[{
-  RowBox[{"uid", "=", "\"\<XYZ\>\""}], 
-  RowBox[{"(*", 
-   RowBox[{"Change", " ", "to", " ", "your", " ", "UID"}], "*)"}], "\n", 
-  "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{
-   "Create", " ", "IPConnection", " ", "and", " ", "device", " ", "object"}], 
-   "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{"ipcon", "=", 
-  RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}], "\n", 
- RowBox[{"nr", "=", 
-  RowBox[{"NETNew", "[", 
-   RowBox[{"\"\<Tinkerforge.BrickletNFCRFID\>\"", ",", "uid", ",", "ipcon"}], 
-   "]"}]}], "\n", 
- RowBox[{
-  RowBox[{"ipcon", "@", 
-   RowBox[{"Connect", "[", 
-    RowBox[{"host", ",", "port"}], "]"}]}], "\[IndentingNewLine]"}], "\n", 
- RowBox[{
-  RowBox[{
-  "currentTageType", "=", 
-   "Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC"}], "\n", 
-  "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{
-   "Callback", " ", "function", " ", "for", " ", "state", " ", "changed", " ",
-     "callback"}], "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"StateChangedCB", "[", 
-    RowBox[{"sender_", ",", "state_", ",", "idle_"}], "]"}], ":=", 
-   "\[IndentingNewLine]", 
-   RowBox[{"Module", "[", 
-    RowBox[{
-     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
-     RowBox[{
-      RowBox[{"If", "[", 
-       RowBox[{"idle", ",", "\[IndentingNewLine]", 
-        RowBox[{
-         RowBox[{"currentTageType", "=", 
-          RowBox[{"Mod", "[", 
-           RowBox[{
-            RowBox[{"currentTageType", "+", "1"}], ",", "3"}], "]"}]}], ";", 
-         "\[IndentingNewLine]", 
-         RowBox[{"sender", "@", 
-          RowBox[{"RequestTagID", "[", "currentTageType", "]"}]}]}]}], 
-       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"If", "[", 
-       RowBox[{
-        RowBox[{
-        "state", "\[Equal]", 
-         "Tinkerforge`BrickletNFCRFID`STATEUREQUESTUTAGUIDUREADY"}], ",", 
-        "\[IndentingNewLine]", 
-        RowBox[{
-         RowBox[{"tagType", "=", "0"}], ";", 
-         RowBox[{"tidLength", "=", "0"}], ";", 
-         RowBox[{"tid", "=", 
-          RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
-         RowBox[{"sender", "@", 
-          RowBox[{"GetTagID", "[", 
-           RowBox[{"tagType", ",", "tidLength", ",", "tid"}], "]"}]}], ";", 
-         "\[IndentingNewLine]", 
-         RowBox[{"result", "=", 
-          RowBox[{"{", 
-           RowBox[{"ToString", "[", 
-            RowBox[{"tid", "[", 
-             RowBox[{"[", "1", "]"}], "]"}], "]"}], "}"}]}], ";", 
-         "\[IndentingNewLine]", 
-         RowBox[{"For", "[", 
-          RowBox[{
-           RowBox[{"i", "=", "2"}], ",", 
-           RowBox[{"i", "\[LessEqual]", "tidLength"}], ",", 
-           RowBox[{"++", "i"}], ",", "\[IndentingNewLine]", 
-           RowBox[{"AppendTo", "[", 
-            RowBox[{"result", ",", 
-             RowBox[{"\"\< \>\"", "<>", 
-              RowBox[{"ToString", "[", 
-               RowBox[{"tid", "[", 
-                RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], "]"}]}], 
-          "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
-         RowBox[{"Print", "[", 
-          RowBox[{"\"\<Found tag of type \>\"", "<>", 
-           RowBox[{"ToString", "[", "tagType", "]"}], "<>", 
-           "\"\< with ID [\>\"", "<>", 
-           RowBox[{"StringJoin", "[", "result", "]"}], "<>", "\"\<]\>\""}], 
-          "]"}]}]}], "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
-    "]"}]}], "\n"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"AddEventHandler", "[", 
-   RowBox[{
-    RowBox[{"nr", "@", "StateChanged"}], ",", "StateChangedCB"}], "]"}], "\n",
-   "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{"Start", " ", "scan", " ", "loop"}], 
-   "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"nr", "@", 
-   RowBox[{
-   "RequestTagID", "[", "BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC", "]"}]}], 
-  "\n"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}], "\n", 
-  "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{"Clean", " ", "up"}], "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{"ipcon", "@", 
-  RowBox[{"Disconnect", "[", "]"}]}], "\n", 
- RowBox[{"ReleaseNETObject", "[", "nr", "]"}], "\n", 
- RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]}], "Input",
- CellChangeTimes->{{3.600075175574196*^9, 3.600075177574486*^9}, {
-   3.600075518821967*^9, 3.60007554243471*^9}, {3.600075580562348*^9, 
-   3.600075669308506*^9}, {3.600075705822371*^9, 3.600075921974015*^9}, {
-   3.6000760067507343`*^9, 3.600076009622583*^9}, {3.600077792659996*^9, 
-   3.600077795613958*^9}, {3.600077854705127*^9, 3.600077855342334*^9}, {
-   3.600090981053762*^9, 3.6000909897413397`*^9}, {3.600091048393783*^9, 
-   3.600091071325759*^9}, {3.6000911068928633`*^9, 3.6000911072763557`*^9}, {
-   3.600091413237206*^9, 3.600091428847453*^9}, {3.600091480127982*^9, 
-   3.60009150669311*^9}, {3.6000915673213387`*^9, 3.6000915678002653`*^9}, {
-   3.600092307925643*^9, 3.600092314241997*^9}, {3.600149020784099*^9, 
-   3.6001491107582273`*^9}, {3.600149174456699*^9, 3.6001491869018793`*^9}, {
-   3.600161252329417*^9, 3.600161270517737*^9}, {3.6001751050299597`*^9, 
-   3.6001752269913054`*^9}, {3.600175283111157*^9, 3.60017529631222*^9}, {
-   3.600500425825809*^9, 3.6005004326356916`*^9}, {3.6005005658827868`*^9, 
-   3.60050056667803*^9}, {3.600506021813815*^9, 3.6005060779666643`*^9}, {
-   3.600506152278829*^9, 3.6005061727773933`*^9}, {3.600607963780426*^9, 
-   3.6006080340220013`*^9}, {3.600608128817329*^9, 3.600608130481505*^9}, {
-   3.60060817038931*^9, 3.600608171010838*^9}, 3.60060822412246*^9, {
-   3.600608254252864*^9, 3.600608318404385*^9}, {3.600608504672563*^9, 
-   3.6006085096134768`*^9}, {3.600608564485358*^9, 3.6006085694976482`*^9}, {
-   3.6006086083315887`*^9, 3.600608696478737*^9}, {3.600608732817322*^9, 
-   3.600608760452553*^9}, {3.600608824736239*^9, 3.600608825481593*^9}, 
-   3.60060918655473*^9, {3.600609227515625*^9, 3.600609227953993*^9}, {
-   3.616314700705291*^9, 3.616314779671431*^9}, {3.6163148658656483`*^9, 
-   3.616314974181798*^9}, {3.616315010126683*^9, 3.616315175759262*^9}, {
-   3.61631526753936*^9, 3.6163152696667433`*^9}, {3.6163153297412558`*^9, 
-   3.616315344644631*^9}, {3.616315393851281*^9, 3.6163154462477837`*^9}, {
-   3.616315607591494*^9, 3.616315670937028*^9}, {3.616315927444541*^9, 
-   3.6163159453973417`*^9}, {3.61631618599885*^9, 3.61631631550334*^9}, {
-   3.616316380271517*^9, 3.616316387142614*^9}, {3.616316469468479*^9, 
-   3.616316492685285*^9}, {3.616316664264317*^9, 3.616316707923465*^9}, {
-   3.652514207130981*^9, 3.652514244265709*^9}}]
-},
-WindowSize->{1521, 867},
-WindowMargins->{{Automatic, 89}, {68, Automatic}},
-FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
-StyleDefinitions->"Default.nb"
-]
-(* End of Notebook Content *)
-
-(* Internal cache information *)
-(*CellTagsOutline
-CellTagsIndex->{}
-*)
-(*CellTagsIndex
-CellTagsIndex->{}
-*)
-(*NotebookFileOutline
-Notebook[{
-Cell[400, 13, 750, 13, 55, "Input"],
-Cell[1153, 28, 6698, 144, 891, "Input"]
-}
-]
-*)
-
+ Cell[
+  BoxData[{
+   RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}],
+   RowBox[{"LoadNETAssembly", "[", RowBox[{"\"\<Tinkerforge\>\"", ",", RowBox[{RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<../../..\>\""}]}], "]"}]
+  }], "Input"
+ ],
+ Cell[
+  BoxData[{
+   RowBox[{"host", "=", "\"\<localhost\>\""}],
+   RowBox[{"port", "=", "4223"}],
+   RowBox[{"uid", "=", "\"\<XYZ\>\"", RowBox[{"(*", "Change XYZ to the UID of your NFC/RFID Bricklet", "*)"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Create IPConnection and device object", "*)"}],
+   RowBox[{"ipcon", "=", RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}],
+   RowBox[{"nr", "=", RowBox[{"NETNew", "[", RowBox[{"\"\<Tinkerforge.BrickletNFCRFID\>\"", ",", "uid", ",", "ipcon"}], "]"}]}],
+   RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"currentTageType", "=", "Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Callback function for state changed callback", "*)"}],
+   RowBox[{RowBox[{"StateChangedCB", "[", RowBox[{"sender_", ",", "state_", ",", "idle_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"If", "[", RowBox[{"idle", ",", RowBox[{"\[IndentingNewLine]", "currentTageType", "=", RowBox[{"Mod", "[", RowBox[{RowBox[{"currentTageType", "+", "1"}], ",", "3"}], "]"}], ";", "\[IndentingNewLine]", "sender", "@", RowBox[{"RequestTagID", "[", "currentTageType", "]"}], "\[IndentingNewLine]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"If", "[", RowBox[{RowBox[{"state", "==", "Tinkerforge`BrickletNFCRFID`STATEUREQUESTUTAGUIDUREADY"}], ",", RowBox[{"\[IndentingNewLine]", "tagType", "=", "0", ";", "tidLength", "=", "0", ";", "tid", "=", RowBox[{"{", "}"}], ";", "\[IndentingNewLine]", "sender", "@", RowBox[{"GetTagID", "[", RowBox[{"tagType", ",", "tidLength", ",", "tid"}], "]"}], ";", "\[IndentingNewLine]", "result", "=", RowBox[{"{", RowBox[{"ToString", "[", RowBox[{"tid", "[", RowBox[{"[", "1", "]"}], "]"}], "]"}], "}"}], ";", "\[IndentingNewLine]", RowBox[{"For", "[", RowBox[{RowBox[{"i", "=", "2"}], ",", RowBox[{"i", "<=", "tidLength"}], ",", RowBox[{"++", "i"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"AppendTo", "[", RowBox[{"result", ",", RowBox[{"\"\< \>\"", "<>", RowBox[{"ToString", "[", RowBox[{"tid", "[", RowBox[{"[", "i", "]"}], "]"}], "]"}]}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Found tag of type \>\"", "<>", RowBox[{"ToString", "[", "tagType", "]"}], "<>", "\"\< with ID [\>\"", "<>", RowBox[{"StringJoin", "[", "result", "]"}], "<>", "\"\<]\>\""}], "]"}], "\[IndentingNewLine]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"nr", "@", "StateChangedCallback"}], ",", "StateChangedCB"}], "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Start scan loop", "*)"}],
+   RowBox[{"nr", "@", RowBox[{"RequestTagID", "[", "BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC", "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Clean up", "*)"}],
+   RowBox[{"ipcon", "@", RowBox[{"Disconnect", "[", "]"}]}],
+   RowBox[{"ReleaseNETObject", "[", "nr", "]"}],
+   RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]
+  }], "Input"
+ ]
+}]
