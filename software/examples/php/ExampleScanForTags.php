@@ -15,24 +15,24 @@ $tag_type = 0;
 // Callback function for state changed callback
 function cb_stateChanged($state, $idle, $user_data)
 {
-	$nr = $user_data;
+    $nr = $user_data;
 
-	if($idle) {
-		global $tag_type;
-		$tag_type = ($tag_type + 1) % 3;
-		$nr->requestTagID($tag_type);
-	}
+    if($idle) {
+        global $tag_type;
+        $tag_type = ($tag_type + 1) % 3;
+        $nr->requestTagID($tag_type);
+    }
 
-	if($state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY) {
-		$ret = $nr->getTagID();
-		echo "Found tag of type " . $ret["tag_type"] . " with ID [" . dechex($ret["tid"][0]);
+    if($state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY) {
+        $ret = $nr->getTagID();
+        echo "Found tag of type " . $ret["tag_type"] . " with ID [" . dechex($ret["tid"][0]);
 
-		for($i = 1; $i < $ret["tid_length"]; $i++) {
-			echo " " . dechex($ret["tid"][$i]);
-		}
+        for($i = 1; $i < $ret["tid_length"]; $i++) {
+            echo " " . dechex($ret["tid"][$i]);
+        }
 
-		echo "]\n";
-	}
+        echo "]\n";
+    }
 }
 
 $ipcon = new IPConnection(); // Create IP connection
