@@ -30,13 +30,7 @@ end
 function cb_state_changed(e)
     global nr;
     global tag_type;
-    
-    % Cycle through all types
-    if e.idle
-        tag_type = mod((tag_type + 1), 3);
-        nr.requestTagID(tag_type);
-    end
-    
+
     if e.state == nr.STATE_REQUEST_TAG_ID_READY
         ret = nr.getTagID();
 
@@ -48,5 +42,11 @@ function cb_state_changed(e)
                     ret.tagType, ret.tid(1), ret.tid(2), ret.tid(3), ret.tid(4), ...
                     ret.tid(5), ret.tid(6), ret.tid(7));
         end
+    end
+
+    % Cycle through all types
+    if e.idle
+        tag_type = mod((tag_type + 1), 3);
+        nr.requestTagID(tag_type);
     end
 end

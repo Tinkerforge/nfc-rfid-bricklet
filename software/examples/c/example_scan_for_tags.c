@@ -13,13 +13,6 @@ uint8_t current_tag_type = NFC_RFID_TAG_TYPE_MIFARE_CLASSIC;
 void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 	NFCRFID *nr = (NFCRFID *)user_data;
 
-	// Cycle through all types
-	if(idle) {
-		current_tag_type = (current_tag_type + 1) % 3;
-
-		nfc_rfid_request_tag_id(nr, current_tag_type);
-	}
-
 	if(state == NFC_RFID_STATE_REQUEST_TAG_ID_READY) {
 		uint8_t tag_type;
 		uint8_t tid_length;
@@ -34,6 +27,13 @@ void cb_state_changed(uint8_t state, bool idle, void *user_data) {
 			printf("Found tag of type %d with ID [%x %x %x %x %x %x %x]\n", 
 			       tag_type, tid[0], tid[1], tid[2], tid[3], tid[4], tid[5], tid[6]);
 		}
+	}
+
+	// Cycle through all types
+	if(idle) {
+		current_tag_type = (current_tag_type + 1) % 3;
+
+		nfc_rfid_request_tag_id(nr, current_tag_type);
 	}
 }
 

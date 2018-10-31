@@ -9,7 +9,10 @@ echo "0" > $tmp
 
 # Handle incoming state changed callbacks
 tinkerforge dispatch nfc-rfid-bricklet $uid state-changed\
- --execute "if [ {idle} ]
+ --execute "if [ {state} == request-tag-id-ready ]
+              then tinkerforge call nfc-rfid-bricklet $uid get-tag-id
+            fi;
+            if [ {idle} ]
             then 
               tt=\$(cat $tmp)
               if [ \$tt -eq 0 ] 
@@ -21,9 +24,6 @@ tinkerforge dispatch nfc-rfid-bricklet $uid state-changed\
               fi
               echo \"\$tt\" > $tmp
               tinkerforge call nfc-rfid-bricklet $uid request-tag-id \$tt
-            fi;
-            if [ {state} == request-tag-id-ready ]
-              then tinkerforge call nfc-rfid-bricklet $uid get-tag-id
             fi" &
 
 # Start scan loop

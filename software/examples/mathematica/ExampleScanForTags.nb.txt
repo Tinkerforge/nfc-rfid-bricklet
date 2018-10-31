@@ -15,10 +15,6 @@ currentTageType=Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC
 (*Callback function for state changed callback*)
 StateChangedCB[sender_,state_,idle_]:=
  Module[{},
-  If[idle,
-   currentTageType=Mod[currentTageType+1,3];
-   sender@RequestTagID[currentTageType]
-  ];
   If[state==Tinkerforge`BrickletNFCRFID`STATEUREQUESTUTAGUIDUREADY,
    tagType=0;tidLength=0;tid={};
    sender@GetTagID[tagType,tidLength,tid];
@@ -27,6 +23,11 @@ StateChangedCB[sender_,state_,idle_]:=
     AppendTo[result," "<>ToString[tid[[i]]]]
    ];
    Print["Found tag of type "<>ToString[tagType]<>" with ID ["<>StringJoin[result]<>"]"]
+  ];
+  (*Cycle through all types*)
+  If[idle,
+   currentTageType=Mod[currentTageType+1,3];
+   sender@RequestTagID[currentTageType]
   ]
  ]
 

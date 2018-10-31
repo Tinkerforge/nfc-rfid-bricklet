@@ -17,11 +17,6 @@ sub cb_state_changed
 {
     my ($state, $idle) = @_;
 
-    if($idle) {
-        $current_tag_type = ($current_tag_type + 1) % 3;
-        $nr->request_tag_id($current_tag_type);
-    }
-
     if($state == $nr->STATE_REQUEST_TAG_ID_READY) {
         my ($tag_type, $tid_length, $tid) = $nr->get_tag_id();
         my $s = "Found tag of type " . $tag_type . " with ID [" . sprintf("%x", @{$tid}[0]);
@@ -33,6 +28,12 @@ sub cb_state_changed
         $s = $s . "]\n";
 
         print $s;
+    }
+
+    # Cycle through all types
+    if($idle) {
+        $current_tag_type = ($current_tag_type + 1) % 3;
+        $nr->request_tag_id($current_tag_type);
     }
 }
 

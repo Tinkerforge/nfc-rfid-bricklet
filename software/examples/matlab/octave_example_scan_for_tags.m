@@ -30,12 +30,6 @@ function cb_state_changed(e)
     global nr;
     global tag_type;
 
-    % Cycle through all types
-    if e.idle
-        tag_type = mod((tag_type + 1), 3);
-        nr.requestTagID(tag_type);
-    end
-
     if java2int(e.state) == java2int(nr.STATE_REQUEST_TAG_ID_READY)
         ret = nr.getTagID();
         tid = ret.tid;
@@ -50,6 +44,12 @@ function cb_state_changed(e)
                     java2int(tid(3)), java2int(tid(4)), java2int(tid(5)), ...
                     java2int(tid(6)), java2int(tid(7)));
         end
+    end
+
+    % Cycle through all types
+    if e.idle
+        tag_type = mod((tag_type + 1), 3);
+        nr.requestTagID(tag_type);
     end
 end
 

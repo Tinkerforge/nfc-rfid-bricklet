@@ -24,11 +24,6 @@ public class ExampleScanForTags {
 		nr.addStateChangedListener(new BrickletNFCRFID.StateChangedListener() {
 			public void stateChanged(short state, boolean idle) {
 				try {
-					if(idle) {
-						currentTagType = (short)((currentTagType + 1) % 3);
-						nr.requestTagID(currentTagType);
-					}
-
 					if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
 						BrickletNFCRFID.TagID tagID = nr.getTagID();
 						String s = "Found tag of type " + tagID.tagType + 
@@ -42,6 +37,11 @@ public class ExampleScanForTags {
 						System.out.println(s);
 					}
 
+					// Cycle through all types
+					if(idle) {
+						currentTagType = (short)((currentTagType + 1) % 3);
+						nr.requestTagID(currentTagType);
+					}
 				} catch(Exception e) {
 					System.out.println(e);
 				}

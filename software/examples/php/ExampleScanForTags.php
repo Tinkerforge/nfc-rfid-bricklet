@@ -17,12 +17,6 @@ function cb_stateChanged($state, $idle, $user_data)
 {
     $nr = $user_data;
 
-    if($idle) {
-        global $tag_type;
-        $tag_type = ($tag_type + 1) % 3;
-        $nr->requestTagID($tag_type);
-    }
-
     if($state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY) {
         $ret = $nr->getTagID();
         echo "Found tag of type " . $ret["tag_type"] . " with ID [" . dechex($ret["tid"][0]);
@@ -32,6 +26,13 @@ function cb_stateChanged($state, $idle, $user_data)
         }
 
         echo "]\n";
+    }
+
+    // Cycle through all types
+    if($idle) {
+        global $tag_type;
+        $tag_type = ($tag_type + 1) % 3;
+        $nr->requestTagID($tag_type);
     }
 }
 

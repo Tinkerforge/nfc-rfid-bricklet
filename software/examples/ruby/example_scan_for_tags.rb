@@ -19,15 +19,16 @@ ipcon.connect HOST, PORT # Connect to brickd
 
 # Register state changed callback
 nr.register_callback(BrickletNFCRFID::CALLBACK_STATE_CHANGED) do |state, idle|
-  if idle
-    current_tag_type = (current_tag_type + 1) % 3
-    nr.request_tag_id current_tag_type
-  end
-
   if state == BrickletNFCRFID::STATE_REQUEST_TAG_ID_READY
     tag_type, tid_length, tid = nr.get_tag_id
     puts "Found tag of type #{tag_type} with ID " +
          "#{tid.take(tid_length).each.map { |b| b.to_s(16) }.join ' '}"
+  end
+
+  # Cycle through all types
+  if idle
+    current_tag_type = (current_tag_type + 1) % 3
+    nr.request_tag_id current_tag_type
   end
 end
 

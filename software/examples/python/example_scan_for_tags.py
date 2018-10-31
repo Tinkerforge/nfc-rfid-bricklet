@@ -12,16 +12,16 @@ tag_type = 0
 
 # Callback function for state changed callback
 def cb_state_changed(state, idle, nr):
+    if state == nr.STATE_REQUEST_TAG_ID_READY:
+        ret = nr.get_tag_id()
+        print("Found tag of type " + str(ret.tag_type) + " with ID [" +
+              " ".join(map(str, map(hex, ret.tid[:ret.tid_length]))) + "]")
+
     # Cycle through all types
     if idle:
         global tag_type
         tag_type = (tag_type + 1) % 3
         nr.request_tag_id(tag_type)
-
-    if state == nr.STATE_REQUEST_TAG_ID_READY:
-        ret = nr.get_tag_id()
-        print("Found tag of type " + str(ret.tag_type) + " with ID [" +
-              " ".join(map(str, map(hex, ret.tid[:ret.tid_length]))) + "]")
 
 if __name__ == "__main__":
     ipcon = IPConnection() # Create IP connection

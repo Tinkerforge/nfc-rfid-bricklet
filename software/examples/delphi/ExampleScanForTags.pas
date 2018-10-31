@@ -35,11 +35,6 @@ procedure TExample.StateChangedCB(sender: TBrickletNFCRFID; const state: byte;
   var s: string;
   var i: byte;
 begin
-  if idle then begin
-    currentTagType := (currentTagType + 1) mod 3;
-    sender.RequestTagID(currentTagType);
-  end;
-
   if state = BRICKLET_NFC_RFID_STATE_REQUEST_TAG_ID_READY then begin
     sender.GetTagID(tagType, tidLength, tid);
     s := 'Found tag of type ' + IntToStr(tagType);
@@ -49,6 +44,12 @@ begin
     end;
     s := s + ']';
     WriteLn(s);
+  end;
+
+  { Cycle through all types }
+  if idle then begin
+    currentTagType := (currentTagType + 1) mod 3;
+    sender.RequestTagID(currentTagType);
   end;
 end;
 

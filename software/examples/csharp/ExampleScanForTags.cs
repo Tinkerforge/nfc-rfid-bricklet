@@ -12,12 +12,6 @@ class Example
 	// Callback function for state changed callback
 	static void StateChangedCB(BrickletNFCRFID sender, byte state, bool idle)
 	{
-		if(idle)
-		{
-			currentTagType = (byte)((currentTagType + 1) % 3);
-			sender.RequestTagID(currentTagType);
-		}
-
 		if(state == BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY)
 		{
 			byte tagType;
@@ -37,6 +31,13 @@ class Example
 				Console.WriteLine("Found tag of type {0} with ID [{1:X} {2:X} {3:X} {4:X}]",
 				                  tagType, tid[0], tid[1], tid[2], tid[3]);
 			}
+		}
+
+		// Cycle through all types
+		if(idle)
+		{
+			currentTagType = (byte)((currentTagType + 1) % 3);
+			sender.RequestTagID(currentTagType);
 		}
 	}
 

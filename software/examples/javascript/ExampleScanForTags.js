@@ -26,11 +26,6 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
 nr.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
     // Callback function for state changed callback
     function (state, idle) {
-        if(idle) {
-            tagType = (tagType + 1) % 3;
-            nr.requestTagID(tagType);
-        }
-
         if(state == Tinkerforge.BrickletNFCRFID.STATE_REQUEST_TAG_ID_READY) {
             nr.getTagID(
                 function (tagType, tidLength, tid) {
@@ -48,6 +43,12 @@ nr.on(Tinkerforge.BrickletNFCRFID.CALLBACK_STATE_CHANGED,
                     console.log('Error: ' + error);
                 }
             )
+        }
+
+        // Cycle through all types
+        if(idle) {
+            tagType = (tagType + 1) % 3;
+            nr.requestTagID(tagType);
         }
     }
 );
