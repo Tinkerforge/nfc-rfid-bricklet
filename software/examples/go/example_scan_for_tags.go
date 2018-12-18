@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-"tinkerforge/ipconnection"
-    "tinkerforge/nfc_rfid_bricklet"
+    "github.com/tinkerforge/go-api-bindings/ipconnection"
+    "github.com/tinkerforge/go-api-bindings/nfc_rfid_bricklet"
 )
 
 const ADDR string = "localhost:4223"
