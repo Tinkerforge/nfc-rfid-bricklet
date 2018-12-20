@@ -13,7 +13,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                                           // Don't use device before ipcon is connected
 
     let state_changed_receiver = nr.get_state_changed_callback_receiver();
-    
+
     // Spawn thread to handle received events.
     // This thread ends when the `nr` object
     // is dropped, so there is no need for manual cleanup.
@@ -28,7 +28,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
             if state_change.state == NFC_RFID_BRICKLET_STATE_REQUEST_TAG_ID_READY {
                 let tag_id = nr_copy.get_tag_id().recv().unwrap();
-                println!("Found tag of type {} with ID {:x?}", tag_id.tag_type, tag_id.tid[0..tag_id.tid_length as usize].to_vec());
+                println!(
+                    "Found tag of type {} with ID {:x?}",
+                    tag_id.tag_type,
+                    tag_id.tid[0..tag_id.tid_length as usize].to_vec()
+                );
             }
         }
     });
