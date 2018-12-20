@@ -28,11 +28,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
             if state_change.state == NFC_RFID_BRICKLET_STATE_REQUEST_TAG_ID_READY {
                 let tag_id = nr_copy.get_tag_id().recv().unwrap();
-                println!(
-                    "Found tag of type {} with ID {:x?}",
-                    tag_id.tag_type,
-                    tag_id.tid[0..tag_id.tid_length as usize].to_vec()
-                );
+                println!("Found tag of type {} with ID {:x?}", tag_id.tag_type, tag_id.tid[0..tag_id.tid_length as usize].to_vec());
             }
         }
     });
