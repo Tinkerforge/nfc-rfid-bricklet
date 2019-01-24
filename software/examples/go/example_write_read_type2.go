@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/Tinkerforge/go-api-bindings/ipconnection"
-    "github.com/Tinkerforge/go-api-bindings/nfc_rfid_bricklet"
+	"github.com/Tinkerforge/go-api-bindings/nfc_rfid_bricklet"
 )
 
 const ADDR string = "localhost:4223"
@@ -11,11 +11,11 @@ const UID string = "XYZ" // Change XYZ to the UID of your NFC/RFID Bricklet.
 
 func main() {
 	ipcon := ipconnection.New()
-    defer ipcon.Close()
+	defer ipcon.Close()
 	nr, _ := nfc_rfid_bricklet.New(UID, &ipcon) // Create device object.
 
 	ipcon.Connect(ADDR) // Connect to brickd.
-    defer ipcon.Disconnect()
+	defer ipcon.Disconnect()
 	// Don't use device before ipcon is connected.
 
 	nr.RegisterStateChangedCallback(func(state nfc_rfid_bricklet.State, idle bool) {
@@ -41,6 +41,4 @@ func main() {
 
 	fmt.Print("Press enter to exit.")
 	fmt.Scanln()
-
-	ipcon.Disconnect()
 }
