@@ -1,0 +1,29 @@
+# Change XYZ to the UID of your NFC/RFID Bricklet
+
+setup:
+	# Handle incoming state changed callbacks
+	set current_tag_type to "mifare_classic"
+	
+	subscribe to tinkerforge/callback/nfc_rfid_bricklet/XYZ/state_changed
+        if a message is received
+            # message contains the current state as int with symbols and idle as bool
+            if idle
+                set current_tag_type to (current_tag_type + 1) % 3
+                publish '{"tag_type": current_tag_type}' to tinkerforge/request/nfc_rfid_bricklet/XYZ/request_tag_id 
+            endif
+            
+            if state == "RequestTagIDReady"
+                subscribe to tinkerforge/response/nfc_rfid_bricklet/XYZ/get_tag_id
+                    if a message is received
+                        # message contains tag_type, id_length and tag_id
+                        print tag_type, id_length and tag_id
+                    endif
+                endsubscribe
+                publish '' to tinkerforge/response/nfc_rfid_bricklet/XYZ/get_tag_id
+            endif            
+        endif
+	endsubscribe
+	publish '{"register": true}' to tinkerforge/register/nfc_rfid_bricklet/XYZ/state_changed
+	 	
+	# Start scan loop
+	publish '{"tag_type": "mifare_classic"}' to tinkerforge/request/nfc_rfid_bricklet/XYZ/request_tag_id 
