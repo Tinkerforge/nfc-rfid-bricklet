@@ -65,7 +65,7 @@ int main(void) {
 	// Register state changed callback to function cb_state_changed
 	nfc_rfid_register_callback(&nr,
 	                           NFC_RFID_CALLBACK_STATE_CHANGED,
-	                           (void *)cb_state_changed,
+	                           (void (*)(void))cb_state_changed,
 	                           &nr);
 
 	// Select NFC Forum Type 2 tag
