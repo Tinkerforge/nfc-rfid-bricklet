@@ -37,5 +37,5 @@ if __name__ == "__main__":
     # Start scan loop
     nr.request_tag_id(nr.TAG_TYPE_MIFARE_CLASSIC)
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()
