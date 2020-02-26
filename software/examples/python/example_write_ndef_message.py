@@ -250,7 +250,7 @@ class NdefMediaRecord(NdefRecord):
 class ExampleNdef:
     HOST = "localhost"
     PORT = 4223
-    UID = "hjw" # Change to your UID
+    UID = "XYZ" # Change XYZ to the UID of your NFC/RFID Bricklet
 
     state_queue = Queue()
     tag_type = None
