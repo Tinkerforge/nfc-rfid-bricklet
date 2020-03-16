@@ -23,7 +23,7 @@ setup:
             endif            
         endif
 	endsubscribe
-	publish '{"register": true}' to tinkerforge/register/nfc_rfid_bricklet/XYZ/state_changed
-	 	
+	publish '{"register": true}' to tinkerforge/register/nfc_rfid_bricklet/XYZ/state_changed # Register state_changed callback
+
 	# Start scan loop
-	publish '{"tag_type": "mifare_classic"}' to tinkerforge/request/nfc_rfid_bricklet/XYZ/request_tag_id 
+	publish '{"tag_type": "mifare_classic"}' to tinkerforge/request/nfc_rfid_bricklet/XYZ/request_tag_id
