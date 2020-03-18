@@ -29,7 +29,7 @@ Notebook[{
    RowBox[{"
 "}],
    RowBox[{"(*", "Start scan loop", "*)"}],
-   RowBox[{"nr", "@", RowBox[{"RequestTagID", "[", "BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC", "]"}]}],
+   RowBox[{"nr", "@", RowBox[{"RequestTagID", "[", "Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC", "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}],

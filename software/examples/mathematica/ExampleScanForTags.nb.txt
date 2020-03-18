@@ -34,7 +34,7 @@ StateChangedCB[sender_,state_,idle_]:=
 AddEventHandler[nr@StateChangedCallback,StateChangedCB]
 
 (*Start scan loop*)
-nr@RequestTagID[BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC]
+nr@RequestTagID[Tinkerforge`BrickletNFCRFID`TAGUTYPEUMIFAREUCLASSIC]
 
 Input["Click OK to exit"]
 
