@@ -1,0 +1,41 @@
+// For this example create an item linked to the state channel of your NFC RFID Bricklet.
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+val READER_STATE_IDLE = 128
+val READER_STATE_REQUEST_TAG_ID_READY = 130
+val READER_STATE_REQUEST_TAG_ID_ERROR = 194
+
+val TAG_TYPE_TYPE2 = 2
+
+rule "NFC"
+when
+    // Change XYZ_State to the created item name
+    Item XYZ_State changed
+then
+    val stateVal = XYZ_State.state as Number
+    val int state = stateVal.intValue
+
+    // Change XYZ to the UID of your NFC RFID Bricklet
+    val nfc = getActions("tinkerforge", "tinkerforge:brickletnfcrfid:XYZ")
+
+    if (state == READER_STATE_IDLE || state == READER_STATE_REQUEST_TAG_ID_ERROR) {
+        nfc.brickletNFCRFIDRequestTagID(TAG_TYPE_TYPE2)
+    } else if (state == READER_STATE_REQUEST_TAG_ID_READY) {
+        logInfo("Example", "tag id ready")
+        
+        val ret = nfc.brickletNFCRFIDGetTagID()
+        
+        val tagType = ret.get("tagType")
+        val tagID = ret.get("tid") as List<Short>
+        val tagLength = ret.get("tidLength")
+        
+        val tag = String.join(" ", tagID.stream().limit(tagLength).map([i | String.format("0x%02X", i)]).collect(Collectors.toList()));
+        
+        logInfo("Example", "tag id:" + tag)
+        
+        // Read tag ID again in one second.
+        createTimer(now.plusSeconds(1), [|nfc.brickletNFCRFIDRequestTagID(2 as short)])
+    }
+end
